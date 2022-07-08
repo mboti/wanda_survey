@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
-import 'package:matrix_gesture_mb/model/floor.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -215,11 +214,10 @@ class _GestDetectorState extends State<GestDetector> {
       final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) / _previousZoom;
       _offset = details.focalPoint - normalizedOffset * _zoom;
       //Offset check =  transformPoint(matrix, _offset);
-      Offset check =  coordScreenToScene(matrix, details.localFocalPoint);
-
-      print("onScaleUpdateFFF---${check.toString()}");
-
-      print(Project().touchArea.toString());
+      Offset Pt =  coordScreenToScene(matrix, details.localFocalPoint);
+      //Project().touchArea?.UpdateArea(Pt.dx, Pt.dy);
+      //print(Project().touchArea.toString());
+      print("onScaleUpdateFFF---${Pt.toString()}");
 
     });//TODO MBO END
   }
@@ -232,8 +230,6 @@ class _GestDetectorState extends State<GestDetector> {
   //TODO MBO
   void onDoubleTap() {
     print("onDoubleTap--------------------------${offsetTouch.toString()}");
-
-    testInfoVarProject();
   }
 
   //TODO MBO
@@ -281,13 +277,13 @@ class _GestDetectorState extends State<GestDetector> {
     Matrix4 mt = Matrix4.copy(transform)..invert();
     final Vector3 position3 = Vector3(point.dx, point.dy, 0.0);
     final Vector3 transformed3 = mt.transform3(position3);  //final Vector3 transformed3 = mt.perspectiveTransform(position3);
+    // MAJ de la zone de contact
+    Project().touchArea?.UpdateArea(transformed3.x, transformed3.y);
+    print(Project().touchArea.toString());
+
     return Offset(transformed3.x, transformed3.y);
   }
 
-  void testInfoVarProject() {
-    Floor? floor = Project().getFloor(0);
-    floor?.altitudeFloor=10;
-  }
 
 }
 

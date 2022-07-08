@@ -21,7 +21,7 @@ class TouchArea {
 
 
   UpdateArea(double xTouch, double yTouch){
-    double Wa = _rateAreaTouchVsW * Project().W_screen * _zoom;
+    double Wa = _rateAreaTouchVsW * Project().W_screen / _zoom;
     _Xmin_touch  = (xTouch - (Wa/2));
     _Ymin_touch  = (yTouch - (Wa/2));
     _Xmax_touch  = (xTouch + (Wa/2));
