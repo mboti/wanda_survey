@@ -219,6 +219,8 @@ class _GestDetectorState extends State<GestDetector> {
 
       print("onScaleUpdateFFF---${check.toString()}");
 
+      print(Project().touchArea.toString());
+
     });//TODO MBO END
   }
 

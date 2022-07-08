@@ -1,10 +1,10 @@
-# matrix_gesture_mb
+# Wanda Survey
 
-A new Flutter project.
+A new Flutter project intended to sniff WiFi networks and create coverage HeatMap.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a starting point for a Flutter application intended for the Android device at first
 
 A few resources to get you started if this is your first Flutter project:
 

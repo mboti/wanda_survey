@@ -41,6 +41,11 @@ class TouchArea {
   set zoom(double value) {
     _zoom = value;
   }
+
+  @override
+  String toString() {
+    return "Zoom: ${_zoom}  Xmin: ${_Xmin_touch}  Ymin: ${_Ymin_touch}  Xmax: ${_Xmax_touch}  Ymax: ${_Ymax_touch}";
+  }
 }
 
 
