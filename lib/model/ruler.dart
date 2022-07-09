@@ -1,5 +1,3 @@
-
-
 import 'package:matrix_gesture_mb/model/project.dart';
 
 class Ruler{
@@ -8,7 +6,8 @@ class Ruler{
   late double _georefY;
   late double _scaleX;
   late double _scaleY;
-  late double _length;
+  late double _lengthMeter;
+  //late int _lengthPixel;
   double rateRulerVsW = 0.5;
 
 
@@ -19,7 +18,7 @@ class Ruler{
     _scaleX = ((Project().W_screen/2) + ((Project().W_screen * rateRulerVsW)/2));
     _scaleY = Project().H_screen/2;
     // longueur de ma règle par défaut lors de l'initialisation
-    _length = 5.0;
+    _lengthMeter = 5.0;
   }
 
 
@@ -31,10 +30,10 @@ class Ruler{
 
   double get georefY => _georefY;
 
-  double get length => _length;
+  double get lengthMeter => _lengthMeter;
 
-  set length(double value) {
-    _length = value;
+  set lengthMeter(double value) {
+    _lengthMeter = value;
   }
 
   double get scaleY => _scaleY;

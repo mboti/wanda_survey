@@ -14,9 +14,6 @@ class DrawRuler {
     paint.strokeCap = StrokeCap.round;
 
     Ruler ruler = Project().floors[0].ruler; // TODO à modifier plus tard lorsque j'aurais plusieurs étages
-    // Offset startingOffset = const Offset(0, 0);
-    // Offset endingOffset = const Offset(100, 0);
-
     Offset startingOffset = Offset(ruler.georefX, ruler.georefY);
     Offset endingOffset = Offset(ruler.scaleX, ruler.scaleY);
 

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/model/ruler.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 
@@ -35,7 +36,7 @@ class GestDetector extends StatefulWidget {
   final Widget child;
 
   // [true] S'il faut détecter les gestes de translation lors du traitement de l'événement..
-  final bool shouldTranslate;
+  static bool shouldTranslate = true;
 
   // [true] S'il faut détecter les gestes d'échelle lors du traitement de l'événement.
   final bool shouldScale;
@@ -54,12 +55,15 @@ class GestDetector extends StatefulWidget {
   //Lorsqu'il est défini, il sera utilisé pour calculer un point focal "fixe" aligné par rapport à la taille de ce widget.
   final Alignment? focalPointAlignment;
 
+
+
+
   // constructeur
   const GestDetector({
     Key? key,
     required this.onMatrixUpdate,
     required this.child,
-    this.shouldTranslate = true,
+    shouldTranslate = true,
     this.shouldScale = true,
     this.shouldRotate = true,
     this.clipChild = true,
@@ -105,11 +109,13 @@ class GestDetector extends StatefulWidget {
 
 
 
+
 class _GestDetectorState extends State<GestDetector> {
   late Offset _startingFocalPoint;
   late Offset _previousOffset;
   Offset _offset = Offset.zero;
   Offset offsetTouch = Offset.zero;  // coordonnée récupérer pendant le toucher et sauvegardé de manière à être transmis au 'doubleTouch' + 'LongTouch'
+  Offset deltaTrans = Offset.zero;
   late double _previousZoom;
   double _zoom = 1.0;
 
@@ -117,6 +123,7 @@ class _GestDetectorState extends State<GestDetector> {
   Matrix4 scaleDeltaMatrix = Matrix4.identity();
   Matrix4 rotationDeltaMatrix = Matrix4.identity();
   Matrix4 matrix = Matrix4.identity();
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +134,9 @@ class _GestDetectorState extends State<GestDetector> {
 
       onScaleStart: onScaleStart,
       onScaleUpdate: onScaleUpdate,
+      onScaleEnd: onScaleEnd,
       onTapDown: onTapDown,
+      onTapUp: onTapUp,
       onDoubleTap: onDoubleTap,
       onLongPress: onLongPress,
 
@@ -153,8 +162,7 @@ class _GestDetectorState extends State<GestDetector> {
     scaleUpdater.value = 1.0;
     rotationUpdater.value = 0.0;
     //TODO MBO
-    //print("onScaleStart---${details.focalPoint}---${details.localFocalPoint}");
-    print("onScaleStart---${details.localFocalPoint}");
+    if(Project.bDebugMode) { print("onScaleStart---${details.localFocalPoint}");}
     setState(() {
       _startingFocalPoint = details.focalPoint;
       _previousOffset = _offset;
@@ -168,7 +176,8 @@ class _GestDetectorState extends State<GestDetector> {
     rotationDeltaMatrix = Matrix4.identity();
 
     /// gère la translation de la matrice
-    if (widget.shouldTranslate) {
+    //if (widget.shouldTranslate) {
+    if (GestDetector.shouldTranslate) {
       Offset translationDelta = translationUpdater.update(details.focalPoint);
       translationDeltaMatrix = _translate(translationDelta);
       matrix = translationDeltaMatrix * matrix;
@@ -202,12 +211,9 @@ class _GestDetectorState extends State<GestDetector> {
     widget.onMatrixUpdate(matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
 
     //TODO MBO
-    //print("onScaleUpdate---${details.focalPoint}---${details.localFocalPoint}");
-    //print("onScaleUpdate---${details.focalPoint}");
-    print("onScaleUpdateF---${details.localFocalPoint}");
+    if(Project.bDebugMode) { print("onScaleUpdateF---${details.localFocalPoint}");}
     setState(() {
       _zoom = _previousZoom * details.scale;
-
       Project().touchArea?.zoom = _zoom;
 
       // Assurez-vous que l'élément sous le point focal reste au même endroit malgré le zoom
@@ -215,26 +221,47 @@ class _GestDetectorState extends State<GestDetector> {
       _offset = details.focalPoint - normalizedOffset * _zoom;
       //Offset check =  transformPoint(matrix, _offset);
       Offset Pt =  coordScreenToScene(matrix, details.localFocalPoint);
-      //Project().touchArea?.UpdateArea(Pt.dx, Pt.dy);
-      //print(Project().touchArea.toString());
-      print("onScaleUpdateFFF---${Pt.toString()}");
+      if(Project.bDebugMode) { print("onScaleUpdateFFF---${Pt.toString()}");}
+
+      // Project().getFloor(0)?.ruler.georefX = Pt.dx + deltaTrans.dx;
+      // Project().getFloor(0)?.ruler.georefY = Pt.dy + deltaTrans.dy;
+
+      Project().getFloor(0)?.ruler.georefX = Pt.dx;
+      Project().getFloor(0)?.ruler.georefY = Pt.dy;
 
     });//TODO MBO END
+
+
+  }
+
+  void onScaleEnd(ScaleEndDetails details) {
+    if(Project.bDebugMode) { print("onScaleEnd-----------------------------------");}
+    //GestDetector.shouldTranslate=true;
   }
 
   void onTapDown(TapDownDetails details)  {
     offsetTouch =  coordScreenToScene(matrix, details.localPosition);
-    print("onTapDown------${offsetTouch.toString()}");
+    if(Project.bDebugMode) { print("onTapDown------${offsetTouch.toString()}");}
+
+    isOverRuler(offsetTouch);
+    isOverPt(offsetTouch);
+  }
+
+  void onTapUp(TapUpDetails details)  {
+    offsetTouch =  coordScreenToScene(matrix, details.localPosition);
+    if(Project.bDebugMode) { print("onTapUp------${offsetTouch.toString()}");}
+
   }
 
   //TODO MBO
   void onDoubleTap() {
-    print("onDoubleTap--------------------------${offsetTouch.toString()}");
+    if(Project.bDebugMode) { print("onDoubleTap--------------------------${offsetTouch.toString()}");}
+    GestDetector.shouldTranslate ? (GestDetector.shouldTranslate=false) : (GestDetector.shouldTranslate=true);
   }
 
   //TODO MBO
   void onLongPress() {
-    print("onLongPress--------------------------${offsetTouch.toString()}");
+    if(Project.bDebugMode) { print("onLongPress--------------------------${offsetTouch.toString()}");}
   }
 
   Matrix4 _translate(Offset translation) {
@@ -279,9 +306,37 @@ class _GestDetectorState extends State<GestDetector> {
     final Vector3 transformed3 = mt.transform3(position3);  //final Vector3 transformed3 = mt.perspectiveTransform(position3);
     // MAJ de la zone de contact
     Project().touchArea?.UpdateArea(transformed3.x, transformed3.y);
-    print(Project().touchArea.toString());
+    if(Project.bDebugMode) { print(Project().touchArea.toString());}
 
     return Offset(transformed3.x, transformed3.y);
+  }
+
+
+
+
+
+
+  isOverRuler(Offset offsetTouch) {
+    Ruler? ruler = Project().getFloor(0)?.ruler;
+    bool? isOverPtRef = Project().touchArea?.isFingerOverObject(ruler!.georefX,ruler.georefY);
+    bool? isOverPtScale = Project().touchArea?.isFingerOverObject(ruler!.scaleX,ruler.scaleY);
+
+    if(isOverPtRef!){
+      if(Project.bDebugMode) { print("je suis sur le point de Référence");}
+      GestDetector.shouldTranslate=false;
+      // deltaTrans = Offset(offsetTouch.dx - ruler!.georefX, offsetTouch.dy - ruler.georefY);
+      // ruler.georefX = offsetTouch.dx + deltaTrans.dx;
+      // ruler.georefY = offsetTouch.dy + deltaTrans.dy;
+    }
+    if(isOverPtScale!){
+      if(Project.bDebugMode) { print("je suis sur le point de Scale");}
+      GestDetector.shouldTranslate=false;
+    }
+  }
+
+
+  isOverPt(Offset offsetTouch) {
+
   }
 
 

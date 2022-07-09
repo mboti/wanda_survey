@@ -73,9 +73,7 @@ class ActivitySceneState extends State<ActivityScene> {
                       notifier.value = m;
                       // var matrix = GestDetector.compose(m, tm, sm, null);
                       // var angle = GestDetector.decomposeToValues(m).rotation;
-                      // print("mounir_____ ${notifier.value}");
-                      // print("mounir++++++ ${matrix.toString()}");
-                      // print("mounir+++angle+++ ${angle.toString()}");
+                      if(Project.bDebugMode) {  print("mounir_____ ${notifier.value}"); }
                     },
                     shouldTranslate: true, /*pas réellement besoin de l'indiquer*/
                     shouldScale: true,     /*pas réellement besoin de l'indiquer*/
@@ -163,8 +161,8 @@ class ActivitySceneState extends State<ActivityScene> {
       setState(() {
         _x = position.dx;
         _y = position.dy;
-        print("x: ${_x}      -  Y: ${_y}");
-        print(maBoite.toString());
+        if(Project.bDebugMode) { print("x: ${_x}      -  Y: ${_y}");}
+        if(Project.bDebugMode) { print(maBoite.toString());}
       });
     }
   }

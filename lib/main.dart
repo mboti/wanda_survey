@@ -5,8 +5,6 @@ import 'package:matrix_gesture_mb/model/project.dart';
 
 import 'ui/activity/activity_scene.dart';
 
-
-
 List<Demo> demos = [
   Demo(
       'Scene',
@@ -42,9 +40,9 @@ void main() => runApp(MaterialApp(
 
 
 showDemo(BuildContext ctx, Demo demo) {
-  print("------------   initProject    --------------");
+  if(Project.bDebugMode) { print("------------   initProject    --------------");}
   initProject();
-  print('showing ${demo.title}...');
+  if(Project.bDebugMode){ print('showing ${demo.title}...'); }
   Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) => demo.widget));
 }
 

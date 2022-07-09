@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:matrix_gesture_mb/model/project.dart';
 
 class ImportPlan extends StatefulWidget {
   const ImportPlan({Key? key}) : super(key: key);
@@ -73,8 +74,8 @@ class _ImportPlanState extends State<ImportPlan>{
       setState(() {
         _x = position.dx;
         _y = position.dy;
-        print("x: ${_x}      -  Y: ${_y}");
-        print(maBoite.toString());
+        if(Project.bDebugMode) { print("x: ${_x}      -  Y: ${_y}");}
+        if(Project.bDebugMode) { print(maBoite.toString());}
       });
     }
   }
