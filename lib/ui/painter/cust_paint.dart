@@ -5,6 +5,9 @@ import 'package:matrix_gesture_mb/ui/painter/draw_touch_area.dart';
 
 class CustPaint extends CustomPainter {
 
+  /// Un listener pour Rafraîchir La scene lorsque je déplace par exemple le ruler
+  CustPaint({required Listenable repaint}) : super(repaint: repaint) {}
+
   DrawRuler drawRuler = DrawRuler();
   DrawTouchArea drawTouchArea = DrawTouchArea();
   // DrawPt drawPt = DrawPt();

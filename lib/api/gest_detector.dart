@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
 import 'package:matrix_gesture_mb/model/ruler.dart';
+import 'package:matrix_gesture_mb/ui/activity/activity_scene.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 
@@ -171,6 +172,10 @@ class _GestDetectorState extends State<GestDetector> {
   }
 
   void onScaleUpdate(ScaleUpdateDetails details) {
+    /// notifier un repaint de la scene /!\ sans cette commande impossible de
+    /// rafraichir la scene lorsque je déplace ke ruler par exemeple
+    ActivitySceneState.repaintNotifier.value++;
+
     translationDeltaMatrix = Matrix4.identity();
     scaleDeltaMatrix = Matrix4.identity();
     rotationDeltaMatrix = Matrix4.identity();
@@ -228,7 +233,7 @@ class _GestDetectorState extends State<GestDetector> {
 
       Project().getFloor(0)?.ruler.georefX = Pt.dx;
       Project().getFloor(0)?.ruler.georefY = Pt.dy;
-
+      /*if(Project.bDebugMode) { */print("coord pointer X: ${Project().getFloor(0)?.ruler.georefX.toString()}   Y: ${Project().getFloor(0)?.ruler.georefY.toString()}");
     });//TODO MBO END
 
 
@@ -236,7 +241,6 @@ class _GestDetectorState extends State<GestDetector> {
 
   void onScaleEnd(ScaleEndDetails details) {
     if(Project.bDebugMode) { print("onScaleEnd-----------------------------------");}
-    //GestDetector.shouldTranslate=true;
   }
 
   void onTapDown(TapDownDetails details)  {

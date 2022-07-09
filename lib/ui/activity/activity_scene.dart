@@ -23,6 +23,11 @@ class ActivitySceneState extends State<ActivityScene> {
   final GlobalKey _key = GlobalKey();
   double? _x, _y;
 
+  static final repaintNotifier = ValueNotifier<int>(0);
+
+  //static CustPaint custPaint = CustPaint(repaint: _counter);
+
+
 
   // late double width = WidgetsBinding.instance.window.physicalSize.width;     //Largeur ecran
   // late double height = WidgetsBinding.instance.window.physicalSize.height; //Hauteur écran
@@ -69,6 +74,9 @@ class ActivitySceneState extends State<ActivityScene> {
                 Expanded(
                   child: GestDetector(
                     key: _key,
+                    // onTapUp: (TapUpDetails details) {
+                    //   _counter.value++;
+                    // },
                     onMatrixUpdate: (m, tm, sm, rm) {
                       notifier.value = m;
                       // var matrix = GestDetector.compose(m, tm, sm, null);
@@ -117,7 +125,7 @@ class ActivitySceneState extends State<ActivityScene> {
                                 child: CustomPaint(
                                   //size: Size(size.width * 0.5, size.height * 0.1),
                                   size: const Size(0, 0),
-                                  painter: CustPaint(),
+                                  painter: CustPaint(repaint: repaintNotifier),//custPaint,
                                 ),
                               ),
 
