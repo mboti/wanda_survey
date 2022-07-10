@@ -14,7 +14,7 @@ class Project {
 
   /// attributs
   /// ---------
-  static bool bDebugMode = false;
+  static bool bDebugMode = true;
   int _idProject = 1;
   String _name = "";
   double _H_screen = 0;

@@ -23,6 +23,7 @@ class ActivitySceneState extends State<ActivityScene> {
   final GlobalKey _key = GlobalKey();
   double? _x, _y;
 
+  /// Fermer de rafraîchir la scène lorsque l'on déplace la règle par exemple
   static final repaintNotifier = ValueNotifier<int>(0);
 
   //static CustPaint custPaint = CustPaint(repaint: _counter);

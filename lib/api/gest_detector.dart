@@ -233,7 +233,7 @@ class _GestDetectorState extends State<GestDetector> {
 
       Project().getFloor(0)?.ruler.georefX = Pt.dx;
       Project().getFloor(0)?.ruler.georefY = Pt.dy;
-      /*if(Project.bDebugMode) { */print("coord pointer X: ${Project().getFloor(0)?.ruler.georefX.toString()}   Y: ${Project().getFloor(0)?.ruler.georefY.toString()}");
+      if(Project.bDebugMode) { print("coord pointer X: ${Project().getFloor(0)?.ruler.georefX.toString()}  Y: ${Project().getFloor(0)?.ruler.georefY.toString()}");}
     });//TODO MBO END
 
 
@@ -241,6 +241,8 @@ class _GestDetectorState extends State<GestDetector> {
 
   void onScaleEnd(ScaleEndDetails details) {
     if(Project.bDebugMode) { print("onScaleEnd-----------------------------------");}
+    /// Réinitialiser le repaint à zéro lorsque j'ai retiré mon doigt de l'écran
+    ActivitySceneState.repaintNotifier.value=0;
   }
 
   void onTapDown(TapDownDetails details)  {
