@@ -112,6 +112,10 @@ class GestDetector extends StatefulWidget {
 
 
 class _GestDetectorState extends State<GestDetector> {
+
+
+
+
   late Offset _startingFocalPoint;
   late Offset _previousOffset;
   Offset _offset = Offset.zero;
@@ -223,26 +227,12 @@ class _GestDetectorState extends State<GestDetector> {
       final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) / _previousZoom;
       _offset = details.focalPoint - normalizedOffset * _zoom;
 
-      Offset pt =  coordScreenToScene(matrix, details.localFocalPoint);
-      if(Project.bDebugMode) { print("onScaleUpdateFFF---${pt.toString()}");}
-
-      print("zoom $_zoom  /   _previousZoom  $_previousZoom");
-
-      //calculé le vecteur "delta" entre le doigt et le point souhaité qu'une seule fois au moment du touché
-      if(deltaTrans == Offset.zero){
-        var x = Project().getFloor(0)?.ruler.georefX;
-        var y = Project().getFloor(0)?.ruler.georefY;
-        deltaTrans= Offset(x!-offsetTouch.dx, y!-offsetTouch.dy);
-      }
-
-      //MAJ des coordonnées du Ruler et interdire la modification du ruler lorsque je fais un zoom
+      //Interdire la modification des items lorsque je fais un zoom
       if(_zoom == _previousZoom){
-        Project().getFloor(0)?.ruler.georefX = pt.dx + deltaTrans.dx;
-        Project().getFloor(0)?.ruler.georefY = pt.dy + deltaTrans.dy;
+        Offset pt =  coordScreenToScene(matrix, details.localFocalPoint);
+        updateItem(pt);
       }
-
-      if(Project.bDebugMode) { print("coord pointer X: ${Project().getFloor(0)?.ruler.georefX.toString()}  Y: ${Project().getFloor(0)?.ruler.georefY.toString()}");}
-    });
+   });
   }
 
   void onScaleEnd(ScaleEndDetails details) {
@@ -251,20 +241,20 @@ class _GestDetectorState extends State<GestDetector> {
     ActivitySceneState.repaintNotifier.value=0;
     /// Réinitialiser le delta entre le toucher du doigt est un objet
     deltaTrans = Offset.zero;
+    Project.itemSelected = ItemSelected.none;
   }
 
   void onTapDown(TapDownDetails details)  {
     offsetTouch =  coordScreenToScene(matrix, details.localPosition);
     if(Project.bDebugMode) { print("onTapDown------${offsetTouch.toString()}");}
-
-    isOverRuler(offsetTouch);
-    isOverPt(offsetTouch);
+    isOverItem(offsetTouch);
   }
 
   void onTapUp(TapUpDetails details)  {
     offsetTouch =  coordScreenToScene(matrix, details.localPosition);
     if(Project.bDebugMode) { print("onTapUp------${offsetTouch.toString()}");}
-
+    deltaTrans = Offset.zero;
+    Project.itemSelected = ItemSelected.none;
   }
 
   //TODO MBO
@@ -327,27 +317,78 @@ class _GestDetectorState extends State<GestDetector> {
 
 
 
-
-
-
-  isOverRuler(Offset offsetTouch) {
+  /// le 'int' retourné correponsdra au numéro du pointMeasure identifié
+  int isOverItem(Offset offsetTouch) {
+    // 1 vérifier si je suis sur le Ruler
     Ruler? ruler = Project().getFloor(0)?.ruler;
-    bool? isOverPtRef = Project().touchArea?.isFingerOverObject(ruler!.georefX,ruler.georefY);
-    bool? isOverPtScale = Project().touchArea?.isFingerOverObject(ruler!.scaleX,ruler.scaleY);
 
-    if(isOverPtRef!){
+    /// sur le Pt de Réf Règle
+    if(Project().touchArea!.isFingerOverObject(ruler!.georefX,ruler.georefY)){
+      Project.itemSelected = ItemSelected.ptRef;
       if(Project.bDebugMode) { print("je suis sur le point de Référence");}
       GestDetector.shouldTranslate=false;
+      return -1;
     }
-    if(isOverPtScale!){
+    /// sur le Pt de Scale Règle
+    else if(Project().touchArea!.isFingerOverObject(ruler.scaleX,ruler.scaleY)) {
+      Project.itemSelected = ItemSelected.ptScale;
       if(Project.bDebugMode) { print("je suis sur le point de Scale");}
       GestDetector.shouldTranslate=false;
+      return -1;
     }
+    /// sur l'AP
+    // else if( /*à renseigner*/) {
+    //   Project.itemSelected = ItemSelected.ap;
+    // }
+    /// sur les Points de Mesure
+    // else if( /*à renseigner*/)  {
+    //   Project.itemSelected = ItemSelected.ptMeasure;
+    // }
+    return -2;
   }
 
+  void updateItem(Offset pt) {
+    switch(Project.itemSelected) {
 
-  isOverPt(Offset offsetTouch) {
+      case ItemSelected.ptRef: {
+        //calculé le vecteur "delta" entre le doigt et le point souhaité qu'une seule fois au moment du touché
+        if(deltaTrans == Offset.zero){
+          deltaTrans= Offset((Project().getFloor(0)?.ruler.georefX)!-offsetTouch.dx,
+                              (Project().getFloor(0)?.ruler.georefY)!-offsetTouch.dy);
+        }
+        //MAJ des coordonnées du Ruler PtRef
+        Project().getFloor(0)?.ruler.georefX = pt.dx + deltaTrans.dx;
+        Project().getFloor(0)?.ruler.georefY = pt.dy + deltaTrans.dy;
+      }
+      break;
 
+      case ItemSelected.ptScale: {
+        if(deltaTrans == Offset.zero){
+          deltaTrans= Offset((Project().getFloor(0)?.ruler.scaleX)!-offsetTouch.dx,
+                              (Project().getFloor(0)?.ruler.scaleY)!-offsetTouch.dy);
+        }
+        //MAJ des coordonnées du Ruler PtScale
+        Project().getFloor(0)?.ruler.scaleX = pt.dx + deltaTrans.dx;
+        Project().getFloor(0)?.ruler.scaleY = pt.dy + deltaTrans.dy;
+      }
+      break;
+
+      case ItemSelected.lengthRuler: {
+      }
+      break;
+
+      case ItemSelected.ap: {
+      }
+      break;
+
+      case ItemSelected.ptMeasure: {
+      }
+      break;
+
+      default: {
+      }
+      break;
+    }
   }
 
 

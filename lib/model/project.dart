@@ -2,6 +2,14 @@ import 'package:matrix_gesture_mb/model/floor.dart';
 import 'package:matrix_gesture_mb/model/touch_area.dart';
 
 
+enum ItemSelected {
+  none,
+  ptRef,
+  ptScale,
+  lengthRuler,
+  ptMeasure,
+  ap
+}
 
 class Project {
 
@@ -15,6 +23,7 @@ class Project {
   /// attributs
   /// ---------
   static bool bDebugMode = true;
+  static ItemSelected itemSelected = ItemSelected.none; //aucun élément de selectionné par défaut
   int _idProject = 1;
   String _name = "";
   double _H_screen = 0;
@@ -25,7 +34,8 @@ class Project {
   List<Floor> _floors = <Floor>[];
   TouchArea? touchArea;
 
-  initProject(String name,double W_screen, double H_screen, bool isTablet){
+
+initProject(String name,double W_screen, double H_screen, bool isTablet){
     _name = name;
     _W_screen = W_screen;
     _H_screen = H_screen;
