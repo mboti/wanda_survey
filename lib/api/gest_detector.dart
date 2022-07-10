@@ -181,13 +181,12 @@ class _GestDetectorState extends State<GestDetector> {
     rotationDeltaMatrix = Matrix4.identity();
 
     /// gère la translation de la matrice
+    /// ------------------------------------------------------------------------
     //if (widget.shouldTranslate) {
     if (GestDetector.shouldTranslate) {
       Offset translationDelta = translationUpdater.update(details.focalPoint);
       translationDeltaMatrix = _translate(translationDelta);
       matrix = translationDeltaMatrix * matrix;
-      //TODO MBO
-      //TODO MBO END
     }
 
     final focalPointAlignment = widget.focalPointAlignment;
@@ -196,26 +195,25 @@ class _GestDetectorState extends State<GestDetector> {
     focalPointAlignment.alongSize(context.size!);
 
     /// gère la mise à l'echelle de la matrice
+    /// ------------------------------------------------------------------------
     if (widget.shouldScale && details.scale != 1.0) {
       double scaleDelta = scaleUpdater.update(details.scale);
       scaleDeltaMatrix = _scale(scaleDelta, focalPoint);
       matrix = scaleDeltaMatrix * matrix;
-      //TODO MBO
-      //TODO MBO END
     }
 
     /// gère la rotation de la matrice
+    /// ------------------------------------------------------------------------
     if (widget.shouldRotate && details.rotation != 0.0) {
       double rotationDelta = rotationUpdater.update(details.rotation);
       rotationDeltaMatrix = _rotate(rotationDelta, focalPoint);
       matrix = rotationDeltaMatrix * matrix;
-      //TODO MBO
-      //TODO MBO END
     }
+    /// ------------------------------------------------------------------------
+
 
     widget.onMatrixUpdate(matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
 
-    //TODO MBO
     if(Project.bDebugMode) { print("onScaleUpdateF---${details.localFocalPoint}");}
     setState(() {
       _zoom = _previousZoom * details.scale;
@@ -224,25 +222,35 @@ class _GestDetectorState extends State<GestDetector> {
       // Assurez-vous que l'élément sous le point focal reste au même endroit malgré le zoom
       final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) / _previousZoom;
       _offset = details.focalPoint - normalizedOffset * _zoom;
-      //Offset check =  transformPoint(matrix, _offset);
-      Offset Pt =  coordScreenToScene(matrix, details.localFocalPoint);
-      if(Project.bDebugMode) { print("onScaleUpdateFFF---${Pt.toString()}");}
 
-      // Project().getFloor(0)?.ruler.georefX = Pt.dx + deltaTrans.dx;
-      // Project().getFloor(0)?.ruler.georefY = Pt.dy + deltaTrans.dy;
+      Offset pt =  coordScreenToScene(matrix, details.localFocalPoint);
+      if(Project.bDebugMode) { print("onScaleUpdateFFF---${pt.toString()}");}
 
-      Project().getFloor(0)?.ruler.georefX = Pt.dx;
-      Project().getFloor(0)?.ruler.georefY = Pt.dy;
+      print("zoom $_zoom  /   _previousZoom  $_previousZoom");
+
+      //calculé le vecteur "delta" entre le doigt et le point souhaité qu'une seule fois au moment du touché
+      if(deltaTrans == Offset.zero){
+        var x = Project().getFloor(0)?.ruler.georefX;
+        var y = Project().getFloor(0)?.ruler.georefY;
+        deltaTrans= Offset(x!-offsetTouch.dx, y!-offsetTouch.dy);
+      }
+
+      //MAJ des coordonnées du Ruler et interdire la modification du ruler lorsque je fais un zoom
+      if(_zoom == _previousZoom){
+        Project().getFloor(0)?.ruler.georefX = pt.dx + deltaTrans.dx;
+        Project().getFloor(0)?.ruler.georefY = pt.dy + deltaTrans.dy;
+      }
+
       if(Project.bDebugMode) { print("coord pointer X: ${Project().getFloor(0)?.ruler.georefX.toString()}  Y: ${Project().getFloor(0)?.ruler.georefY.toString()}");}
-    });//TODO MBO END
-
-
+    });
   }
 
   void onScaleEnd(ScaleEndDetails details) {
     if(Project.bDebugMode) { print("onScaleEnd-----------------------------------");}
     /// Réinitialiser le repaint à zéro lorsque j'ai retiré mon doigt de l'écran
     ActivitySceneState.repaintNotifier.value=0;
+    /// Réinitialiser le delta entre le toucher du doigt est un objet
+    deltaTrans = Offset.zero;
   }
 
   void onTapDown(TapDownDetails details)  {
@@ -311,7 +319,7 @@ class _GestDetectorState extends State<GestDetector> {
     final Vector3 position3 = Vector3(point.dx, point.dy, 0.0);
     final Vector3 transformed3 = mt.transform3(position3);  //final Vector3 transformed3 = mt.perspectiveTransform(position3);
     // MAJ de la zone de contact
-    Project().touchArea?.UpdateArea(transformed3.x, transformed3.y);
+    Project().touchArea?.updateArea(transformed3.x, transformed3.y);
     if(Project.bDebugMode) { print(Project().touchArea.toString());}
 
     return Offset(transformed3.x, transformed3.y);
@@ -330,9 +338,6 @@ class _GestDetectorState extends State<GestDetector> {
     if(isOverPtRef!){
       if(Project.bDebugMode) { print("je suis sur le point de Référence");}
       GestDetector.shouldTranslate=false;
-      // deltaTrans = Offset(offsetTouch.dx - ruler!.georefX, offsetTouch.dy - ruler.georefY);
-      // ruler.georefX = offsetTouch.dx + deltaTrans.dx;
-      // ruler.georefY = offsetTouch.dy + deltaTrans.dy;
     }
     if(isOverPtScale!){
       if(Project.bDebugMode) { print("je suis sur le point de Scale");}

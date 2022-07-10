@@ -21,39 +21,47 @@ import 'package:matrix_gesture_mb/model/project.dart';
 
 class TouchArea {
 
-  double _zoom=1;
-  double _rateAreaTouchVsW=0.1;
-  double _Xmin_touch=0;
-  double _Ymin_touch=0;
-  double _Xmax_touch=0;
-  double _Ymax_touch=0;
+  double _zoom = 1;
+  final double _zoomMax = 5;
+  final double _zoomMin = 0.3;
+  final double rateAreaTouchVsWMobile = 0.15;  /// modifier cette valeur pour l'ajuster au mobile
+  final double rateAreaTouchVsWTablet = 0.2;  /// modifier cette valeur pour l'ajuster à la tablette
+  double _rateAreaTouchVsW = 0.1;
+  double _xMinTouch = 0;
+  double _yMinTouch = 0;
+  double _xMaxTouch = 0;
+  double _yMaxTouch = 0;
 
   TouchArea(double zoom, bool isTablet){
     _zoom = zoom;
 
     // Mobile -> rateAreaTouchVsW = 0.2
     // Tablet -> rateAreaTouchVsW = 0.1
-    _rateAreaTouchVsW = (isTablet) ? 0.1 : 0.2;
+    _rateAreaTouchVsW = (isTablet) ? rateAreaTouchVsWMobile : rateAreaTouchVsWTablet;
   }
 
 
-  UpdateArea(double xTouch, double yTouch){
-    double Wa = _rateAreaTouchVsW * Project().W_screen / _zoom;
-    _Xmin_touch  = (xTouch - (Wa/2));
-    _Ymin_touch  = (yTouch - (Wa/2));
-    _Xmax_touch  = (xTouch + (Wa/2));
-    _Ymax_touch  = (yTouch + (Wa/2));
+  updateArea(double xTouch, double yTouch){
+    double wa = _rateAreaTouchVsW * Project().W_screen / _zoom;
+    _xMinTouch  = (xTouch - (wa/2));
+    _yMinTouch  = (yTouch - (wa/2));
+    _xMaxTouch  = (xTouch + (wa/2));
+    _yMaxTouch  = (yTouch + (wa/2));
   }
 
-  double get Ymax_touch => _Ymax_touch;
+  double get yMaxTouch => _yMaxTouch;
 
-  double get Xmax_touch => _Xmax_touch;
+  double get xMaxTouch => _xMaxTouch;
 
-  double get Ymin_touch => _Ymin_touch;
+  double get yMinTouch => _yMinTouch;
 
-  double get Xmin_touch => _Xmin_touch;
+  double get xMinTouch => _xMinTouch;
 
   double get zoom => _zoom;
+
+  double get zoomMax => _zoomMax;
+
+  double get zoomMin => _zoomMin;
 
   set zoom(double value) {
     _zoom = value;
@@ -61,19 +69,18 @@ class TouchArea {
 
   @override
   String toString() {
-    return "Zoom: ${_zoom}  Xmin: ${_Xmin_touch}  Ymin: ${_Ymin_touch}  Xmax: ${_Xmax_touch}  Ymax: ${_Ymax_touch}";
+    return "Zoom: $_zoom  Xmin: $_xMinTouch  Ymin: $_yMinTouch  Xmax: $_xMaxTouch  Ymax: $_yMaxTouch";
   }
 
 
   // Va comparer la position de mon doigt avec l'objet sur mon écran
-  bool isFingerOverObject(double PtObjX, double PtObjY){
-    if( _Xmax_touch > PtObjX &&
-        _Xmin_touch < PtObjX &&
-        _Ymax_touch > PtObjY &&
-        _Ymin_touch < PtObjY){
+  bool isFingerOverObject(double ptObjX, double ptObjY){
+    if( _xMaxTouch > ptObjX &&
+        _xMinTouch < ptObjX &&
+        _yMaxTouch > ptObjY &&
+        _yMinTouch < ptObjY){
       return true;
     }
     return false;
   }
-
 }
