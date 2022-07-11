@@ -6,6 +6,8 @@ class Ruler{
   late double _georefY;
   late double _scaleX;
   late double _scaleY;
+  late double _txtX;
+  late double _txtY;
   late double _lengthMeter;
   //late int _lengthPixel;
   double rateRulerVsW = 0.5;
@@ -20,11 +22,14 @@ class Ruler{
     _scaleX = ((Project().W_screen/2) + ((Project().W_screen * rateRulerVsW)/2));
     _scaleY = Project().H_screen/2;
 
+    calculPosTxt();
+
     //largeur marker
     _widthMarker = Project().W_screen *0.1;
     // longueur de ma règle par défaut lors de l'initialisation
     _lengthMeter = 5.0;
   }
+
 
 
   double get georefX => _georefX;
@@ -35,6 +40,7 @@ class Ruler{
   double get georefY => _georefY;
   set georefY(double value) {
     _georefY = value;
+    calculPosTxt();
   }
 
   double get scaleX => _scaleX;
@@ -45,7 +51,11 @@ class Ruler{
   double get scaleY => _scaleY;
   set scaleY(double value) {
     _scaleY = value;
+    calculPosTxt();
   }
+
+  double get txtX => _txtX;
+  double get txtY => _txtY;
 
   double get lengthMeter => _lengthMeter;
   set lengthMeter(double value) {
@@ -53,4 +63,10 @@ class Ruler{
   }
 
   double get widthMarker => _widthMarker;
+
+  calculPosTxt(){
+    _txtX = (_georefX + _scaleX)/2;
+    _txtY = (_georefY + _scaleY)/2;
+  }
+
 }

@@ -6,27 +6,39 @@
 class AP{
 
   String _name;
-  double _posX;
-  double _posY;
+  double _posXScreen;
+  double _posYScreen;
+  int _posXPixel = 0;
+  int _posYPixel = 0;
 
 
-  AP(this._name, this._posX, this._posY);
+  /// constructeur
+  AP(this._name, this._posXScreen, this._posYScreen);
 
-  double get posY => _posY;
 
-  set posY(double value) {
-    _posY = value;
-  }
-
-  double get posX => _posX;
-
-  set posX(double value) {
-    _posX = value;
-  }
-
+  /// getter et setter
   String get name => _name;
-
   set name(String value) {
     _name = value;
+  }
+
+  int get posXPixel => _posXPixel;
+  set posXPixel(int value) {
+    _posXPixel = value;
+  }
+
+  int get posYPixel => _posYPixel;
+  set posYPixel(int value) {
+    _posYPixel = value;
+  }
+
+  double get posXScreen => _posXScreen;
+  set posXScreen(double value) {
+    _posXScreen = value;
+  }
+
+  double get posYScreen => _posYScreen;
+  set posYScreen(double value) {
+    _posYScreen = value;
   }
 }
