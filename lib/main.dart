@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/ui/activity/activity_paint_image.dart';
 
 import 'ui/activity/activity_scene.dart';
 
@@ -10,6 +11,10 @@ List<Demo> demos = [
       'Scene',
       'Demo Koudous pour t\'expliquer comment ça marche',
       const ActivityScene()),
+  Demo(
+      'DrawImage',
+      'Demo pour dessiner une photo avec le Painter',
+      const ActivityPaintImage()),
 ];
 
 void main() => runApp(MaterialApp(

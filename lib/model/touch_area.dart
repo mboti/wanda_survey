@@ -25,7 +25,7 @@ class TouchArea {
   final double _zoomMax = 5;
   final double _zoomMin = 0.3;
   final double rateAreaTouchVsWMobile = 0.15;  /// modifier cette valeur pour l'ajuster au mobile
-  final double rateAreaTouchVsWTablet = 0.2;  /// modifier cette valeur pour l'ajuster à la tablette
+  final double rateAreaTouchVsWTablet = 0.10;  /// modifier cette valeur pour l'ajuster à la tablette
   double _rateAreaTouchVsW = 0.1;
   double _xMinTouch = 0;
   double _yMinTouch = 0;
@@ -37,7 +37,7 @@ class TouchArea {
 
     // Mobile -> rateAreaTouchVsW = 0.2
     // Tablet -> rateAreaTouchVsW = 0.1
-    _rateAreaTouchVsW = (isTablet) ? rateAreaTouchVsWMobile : rateAreaTouchVsWTablet;
+    _rateAreaTouchVsW = (isTablet) ? rateAreaTouchVsWTablet: rateAreaTouchVsWMobile ;
   }
 
 

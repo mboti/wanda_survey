@@ -10,6 +10,7 @@ class CustPaint extends CustomPainter {
 
   DrawRuler drawRuler = DrawRuler();
   DrawTouchArea drawTouchArea = DrawTouchArea();
+  //DrawPlan drawPlan = DrawPlan();
   // DrawPt drawPt = DrawPt();
   // DrawAP drawAP = DrawAP();
   // DrawHeatMap drawHeatMap = DrawHeatMap();

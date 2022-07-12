@@ -7,6 +7,12 @@ import 'package:matrix_gesture_mb/ui/activity/activity_scene.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 
+enum TypeTouch{
+  none,
+  tap,
+  longTouch,
+  doubleTap
+}
 
 
 
@@ -113,9 +119,6 @@ class GestDetector extends StatefulWidget {
 
 class _GestDetectorState extends State<GestDetector> {
 
-
-
-
   late Offset _startingFocalPoint;
   late Offset _previousOffset;
   Offset _offset = Offset.zero;
@@ -129,11 +132,12 @@ class _GestDetectorState extends State<GestDetector> {
   Matrix4 rotationDeltaMatrix = Matrix4.identity();
   Matrix4 matrix = Matrix4.identity();
 
+  TypeTouch typeTouch = TypeTouch.none;
+
 
   @override
   Widget build(BuildContext context) {
-    Widget child =
-    widget.clipChild ? ClipRect(child: widget.child) : widget.child;
+    Widget child = widget.clipChild ? ClipRect(child: widget.child) : widget.child;
     return GestureDetector(
       behavior: widget.behavior,
 
@@ -236,6 +240,7 @@ class _GestDetectorState extends State<GestDetector> {
   }
 
   void onScaleEnd(ScaleEndDetails details) {
+    typeTouch = TypeTouch.none;
     if(Project.bDebugMode) { print("onScaleEnd-----------------------------------");}
     /// Réinitialiser le repaint à zéro lorsque j'ai retiré mon doigt de l'écran
     ActivitySceneState.repaintNotifier.value=0;
@@ -245,12 +250,14 @@ class _GestDetectorState extends State<GestDetector> {
   }
 
   void onTapDown(TapDownDetails details)  {
+    typeTouch = TypeTouch.tap;
     offsetTouch =  coordScreenToScene(matrix, details.localPosition);
     if(Project.bDebugMode) { print("onTapDown------${offsetTouch.toString()}");}
     isOverItem(offsetTouch);
   }
 
   void onTapUp(TapUpDetails details)  {
+    typeTouch = TypeTouch.none;
     offsetTouch =  coordScreenToScene(matrix, details.localPosition);
     if(Project.bDebugMode) { print("onTapUp------${offsetTouch.toString()}");}
     deltaTrans = Offset.zero;
@@ -259,12 +266,14 @@ class _GestDetectorState extends State<GestDetector> {
 
   //TODO MBO
   void onDoubleTap() {
+    typeTouch = TypeTouch.doubleTap;
     if(Project.bDebugMode) { print("onDoubleTap--------------------------${offsetTouch.toString()}");}
     GestDetector.shouldTranslate ? (GestDetector.shouldTranslate=false) : (GestDetector.shouldTranslate=true);
   }
 
   //TODO MBO
   void onLongPress() {
+    typeTouch = TypeTouch.longTouch;
     if(Project.bDebugMode) { print("onLongPress--------------------------${offsetTouch.toString()}");}
   }
 
@@ -322,28 +331,46 @@ class _GestDetectorState extends State<GestDetector> {
     // 1 vérifier si je suis sur le Ruler
     Ruler? ruler = Project().getFloor(0)?.ruler;
 
-    /// sur le Pt de Réf Règle
-    if(Project().touchArea!.isFingerOverObject(ruler!.georefX,ruler.georefY)){
-      Project.itemSelected = ItemSelected.ptRef;
-      if(Project.bDebugMode) { print("je suis sur le point de Référence");}
-      GestDetector.shouldTranslate=false;
-      return -1;
+    // TypeTouch.tap
+    //--------------------------------------------------
+    if(typeTouch == TypeTouch.tap){
+      /// Pt de Réf Règle
+      if(Project().touchArea!.isFingerOverObject(ruler!.georefX,ruler.georefY)){
+        Project.itemSelected = ItemSelected.ptRef;
+        if(Project.bDebugMode) { print("je suis sur le point de Référence");}
+        GestDetector.shouldTranslate=false;
+        return -1;
+      }
+      /// Pt de Scale Règle
+      else if(Project().touchArea!.isFingerOverObject(ruler.scaleX,ruler.scaleY)) {
+        Project.itemSelected = ItemSelected.ptScale;
+        if(Project.bDebugMode) { print("je suis sur le point de Scale");}
+        GestDetector.shouldTranslate=false;
+        return -1;
+      }
+      /// sur l'AP
+      // else if( /*à renseigner*/) {
+      //   Project.itemSelected = ItemSelected.ap;
+      // }
+      /// sur les Points de Mesure
+      // else if( /*à renseigner*/)  {
+      //   Project.itemSelected = ItemSelected.ptMeasure;
+      // }
     }
-    /// sur le Pt de Scale Règle
-    else if(Project().touchArea!.isFingerOverObject(ruler.scaleX,ruler.scaleY)) {
-      Project.itemSelected = ItemSelected.ptScale;
-      if(Project.bDebugMode) { print("je suis sur le point de Scale");}
-      GestDetector.shouldTranslate=false;
-      return -1;
+
+
+    // TypeTouch.longTouch
+    //--------------------------------------------------
+    if(typeTouch == TypeTouch.longTouch){
+      /// info longueur Règle
+      if(Project().touchArea!.isFingerOverObject(ruler!.scaleX,ruler.scaleY)) {
+        Project.itemSelected = ItemSelected.lengthRuler;
+        if(Project.bDebugMode) { print("je suis sur l'info mesure de la règle");}
+        GestDetector.shouldTranslate=false;
+        return -1;
+      }
     }
-    /// sur l'AP
-    // else if( /*à renseigner*/) {
-    //   Project.itemSelected = ItemSelected.ap;
-    // }
-    /// sur les Points de Mesure
-    // else if( /*à renseigner*/)  {
-    //   Project.itemSelected = ItemSelected.ptMeasure;
-    // }
+
     return -2;
   }
 
@@ -386,6 +413,7 @@ class _GestDetectorState extends State<GestDetector> {
       break;
 
       default: {
+        Project.itemSelected = ItemSelected.none;
       }
       break;
     }

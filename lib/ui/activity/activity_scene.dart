@@ -18,7 +18,7 @@ class ActivityScene extends StatefulWidget {
 class ActivitySceneState extends State<ActivityScene> {
 
   late Size imageSize = const Size(0.00, 0.00);
-  String pathImage = "images/plan.jpg";
+  //String pathImage = "images/plan.jpg";
 
   final GlobalKey _key = GlobalKey();
   double? _x, _y;
@@ -42,6 +42,10 @@ class ActivitySceneState extends State<ActivityScene> {
     bool isTablet = Screen.diagonalInches(context) >= 7;
 
     initProject("name project test", size, isTablet);
+
+    //String pathImage = "images/plan.jpg";
+    Project().getFloor(0)!.plan.pathImg = "images/plan.jpg";
+    String? pathImg = Project().getFloor(0)!.plan.pathImg;
 
     return Scaffold(
         backgroundColor: Colors.grey,
@@ -109,7 +113,7 @@ class ActivitySceneState extends State<ActivityScene> {
                                   //child: InteractiveViewer(
 
                                     child: Image.asset(
-                                      pathImage,
+                                      pathImg!,
                                       fit: BoxFit.cover,
                                       // height: size.height,
                                       // width: size.width,
@@ -145,9 +149,12 @@ class ActivitySceneState extends State<ActivityScene> {
   }
 
 
-  void _getImageDimension() {
+  _getImageDimension() {
     //Image image = Image.network(imageURL);
-    Image image = Image.asset(pathImage);
+    //Image image = Image.asset(pathImg);
+    Project().getFloor(0)!.plan.pathImg = "images/plan2.jpg";
+    String? pathImg = Project().getFloor(0)?.plan.pathImg;
+    Image image = Image.asset(pathImg!);
     image.image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
             (ImageInfo image, bool synchronousCall) {
@@ -158,6 +165,10 @@ class ActivitySceneState extends State<ActivityScene> {
         },
       ),
     );
+
+    print("je suis bien passé par là");
+
+    refresh();
 
     _getImagePosition(_key);
   }
@@ -179,6 +190,11 @@ class ActivitySceneState extends State<ActivityScene> {
 
   void initProject(String nameProject, Size size, bool isTablet){
     Project().initProject(nameProject, size.width, size.height, isTablet);
+  }
+
+  refresh() {
+    setState(() {});
+    print(Project().getFloor(0)?.plan.pathImg);
   }
 }
 
