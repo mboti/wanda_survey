@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
-
 import 'ui/activity/activity_scene.dart';
 
 
