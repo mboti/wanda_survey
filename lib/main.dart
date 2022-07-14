@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_paint_image.dart';
+import 'package:matrix_gesture_mb/ui/activity/activity_wifi.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'ui/activity/activity_scene.dart';
@@ -16,6 +17,10 @@ List<Demo> demos = [
       'DrawImage',
       'Demo pour dessiner une photo avec le Painter',
       const ActivityPaintImage()),
+  Demo(
+      'Wi-Fi',
+      'Demo pour visualiser les réseaux Wi-Fi',
+      const ActivityWifi()),
 ];
 
 void main() => runApp(MaterialApp(
