@@ -17,6 +17,9 @@ dependencies:
   vector_math: ^2.1.2
   image_picker: ^0.8.5+3
 
+  wifi_hunter: ^1.1.0+1        # sniffer wifi
+  permission_handler: ^9.2.0   # permission pour visualiser le wifi
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

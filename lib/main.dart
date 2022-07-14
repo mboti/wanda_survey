@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_paint_image.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'ui/activity/activity_scene.dart';
 
@@ -46,7 +47,8 @@ void main() => runApp(MaterialApp(
 
 showDemo(BuildContext ctx, Demo demo) {
   if(Project.bDebugMode) { print("------------   initProject    --------------");}
-  initProject();
+  initProject(); // initialisation du Project
+  permissionRequest(); // demande des permissions pour visualiser le WiFi
   if(Project.bDebugMode){ print('showing ${demo.title}...'); }
   Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) => demo.widget));
 }
@@ -69,5 +71,12 @@ initProject(){
   // Project().setUpdateSizeScreen(300,300);
   // Floor floor = Project().getFloor(0);
   // floor.hauteurFloor = 7;
+}
+
+Future<void> permissionRequest() async {
+  await Permission.location.request();
+  if (await Permission.location.isGranted) {
+    print("permission.isGranted");
+  }
 }
 
