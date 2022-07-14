@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/api/gest_detector.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/ui/component/component_import_Image.dart';
 import 'package:matrix_gesture_mb/ui/painter/cust_paint.dart';
 import 'package:matrix_gesture_mb/utils/screen.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 
 
@@ -21,7 +25,14 @@ class ActivitySceneState extends State<ActivityScene> {
   //String pathImage = "images/plan.jpg";
 
   final GlobalKey _key = GlobalKey();
+  final GlobalKey globalKey = GlobalKey();
+
   double? _x, _y;
+
+  File? imageFile;
+  XFile? picture;
+
+  ComponentImportImage componentImportImage = ComponentImportImage();
 
   /// Fermer de rafraîchir la scène lorsque l'on déplace la règle par exemple
   static final repaintNotifier = ValueNotifier<int>(0);
@@ -45,7 +56,7 @@ class ActivitySceneState extends State<ActivityScene> {
 
     //String pathImage = "images/plan.jpg";
     Project().getFloor(0)!.plan.pathImg = "images/plan.jpg";
-    String? pathImg = Project().getFloor(0)!.plan.pathImg;
+    //String? pathImg = Project().getFloor(0)!.plan.pathImg;
 
     return Scaffold(
         backgroundColor: Colors.grey,
@@ -69,6 +80,17 @@ class ActivitySceneState extends State<ActivityScene> {
                   ),
                   onPressed: _getImageDimension,
                   child: const Text('Get Image Size'),
+                ),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    padding: const EdgeInsets.all(2),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  onPressed:() => componentImportImage.createState().buildShowDialogForChoiceCamOrGal(context),
+                  //ComponentImportImageState().buildShowDialogForChoiceCamOrGal(ComponentImportImageState().context),
+                  child: const Text('Get Image'),
                 ),
 
                 Text(
@@ -110,8 +132,8 @@ class ActivitySceneState extends State<ActivityScene> {
 
 
                                 child: Center(
-                                  //child: InteractiveViewer(
-
+                                  child: componentImportImage.createState().buildImageDisplayWidget(),
+                                  /*
                                     child: Image.asset(
                                       pathImg!,
                                       fit: BoxFit.cover,
@@ -119,6 +141,8 @@ class ActivitySceneState extends State<ActivityScene> {
                                       // width: size.width,
                                     ),
                                   //),
+                                  */
+
                                 ),
                               ),
 
