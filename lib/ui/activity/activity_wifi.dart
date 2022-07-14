@@ -18,6 +18,10 @@ class _ActivityWifiState extends State<ActivityWifi> {
   WiFiHunterResult wiFiHunterResult = WiFiHunterResult();
   Color huntButtonColor = Colors.lightBlue;
 
+
+  ///**************************************************************
+  ///            LA PARTIE LAPLUS IMPORTANTE DU CODE
+  ///**************************************************************
   Future<void> huntWiFis() async {
     setState(() => huntButtonColor = Colors.red);
 
@@ -32,6 +36,9 @@ class _ActivityWifiState extends State<ActivityWifi> {
 
     setState(() => huntButtonColor = Colors.lightBlue);
   }
+  ///  ensuite faire une boucle sur 'wiFiHunterResult' pour récuperer toutes les infos
+  ///           wiFiHunterResult.results[index].XXXXX
+  ///**************************************************************
 
 /*
   Future<void> demandeDePermission() async {

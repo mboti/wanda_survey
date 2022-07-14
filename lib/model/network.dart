@@ -1,8 +1,7 @@
 
 
-/**
- * Classe décrivant les configurations d'un network
- */
+///Classe décrivant les configurations d'un network
+
 class Network {
 
   String? _ssid;
@@ -10,10 +9,10 @@ class Network {
   String? _capability;
   int? _frequency;
   int? _level;
-  int? _channel_width;
-  int? _timestamp;
+  int? _channelWidth;
 
-  Network(this._bssid, this._ssid, this._capability, this._frequency, this._level, this._channel_width, this._timestamp);
+
+  Network(this._bssid, this._ssid, this._capability, this._frequency, this._level, this._channelWidth);
 
   String get bssid => _bssid!;
 
@@ -21,16 +20,10 @@ class Network {
     _bssid = value;
   }
 
-  int get timestamp => _timestamp!;
+  int get channelWidth => _channelWidth!;
 
-  set timestamp(int value) {
-    _timestamp = value;
-  }
-
-  int get channel_width => _channel_width!;
-
-  set channel_width(int value) {
-    _channel_width = value;
+  set channelWidth(int value) {
+    _channelWidth = value;
   }
 
   int get level => _level!;
@@ -59,7 +52,7 @@ class Network {
 
   @override
   String toString() {
-    return 'Network{_bssid: $_bssid, _ssid: $_ssid, _capability: $_capability, _frequency: $_frequency, _level: $_level, _channel_width: $_channel_width, _timestamp: $_timestamp}';
+    return 'Network{_bssid: $_bssid, _ssid: $_ssid, _capability: $_capability, _frequency: $_frequency, _level: $_level, _channel_width: $_channelWidth}';
   }
 
 

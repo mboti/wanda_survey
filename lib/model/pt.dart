@@ -1,8 +1,7 @@
 import 'package:matrix_gesture_mb/model/network.dart';
 
-/**
- * Classe décrivant les points de Mesure placés sur un plan
- */
+/// Classe décrivant les points de Mesure placés sur un plan
+
 class Pt{
 
   int? _id;
@@ -10,6 +9,7 @@ class Pt{
   double? _posX;
   double? _posY;
   double _radius = 40.0;
+  int? _timestamp;
 
   List<Network> _networks = <Network>[];
 
@@ -47,9 +47,16 @@ class Pt{
     _label = value;
   }
 
-  /**
-   * Seter et update le pt
-   */
+  int get timestamp => _timestamp!;
+
+  set timestamp(int value) {
+    _timestamp = value;
+  }
+
+  int getTimestamp(){
+    return DateTime.now().millisecondsSinceEpoch;
+  }
+  /// Setter et update le pt
   updatePt(double x, double y) {
     posX = x;
     posY = y;
@@ -60,16 +67,12 @@ class Pt{
     return 'Pt{_id: $_id, _label: $_label, _posX: $_posX, _posY: $_posY, _radius: $_radius}';
   }
 
-  /**
-   * get la liste de network
-   */
+  /// get la liste de network
   List<Network> get networks {
     return _networks;
   }
 
-  /**
-   * Set la liste de Network
-   */
+  /// Set la liste de Network
   set networks(List<Network> networks) {
     _networks = networks;
   }
