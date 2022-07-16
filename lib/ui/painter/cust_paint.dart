@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matrix_gesture_mb/model/project.dart';
 import 'package:matrix_gesture_mb/ui/painter/draw_ruler.dart';
 import 'package:matrix_gesture_mb/ui/painter/draw_touch_area.dart';
 
@@ -19,7 +20,9 @@ class CustPaint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
 
-    drawRuler.paint(canvas, size);
+    if(Project().getFloor(0)!.isDrawRuler){
+      drawRuler.paint(canvas, size);
+    }
     drawTouchArea.paint(canvas, size);
 
     /// ce qu'il faudra ajouter

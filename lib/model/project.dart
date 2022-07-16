@@ -30,6 +30,7 @@ class Project {
   double _W_screen = 0;
   double _heightFloor = 3;
   bool _isTablet = false;
+  String _nameDefaultPlan = "images/ico_soft.png";
 
   List<Floor> _floors = <Floor>[];
   TouchArea? touchArea;
@@ -41,6 +42,7 @@ initProject(String name,double W_screen, double H_screen, bool isTablet){
     _H_screen = H_screen;
     _isTablet = isTablet;
     addFloor();
+    getFloor(0)!.plan.pathImg = _nameDefaultPlan;
     touchArea = TouchArea(1, _isTablet);
   }
 
@@ -87,6 +89,13 @@ initProject(String name,double W_screen, double H_screen, bool isTablet){
 
   set H_screen(double value) {
     _H_screen = value;
+  }
+
+
+  String get nameDefaultPlan => _nameDefaultPlan;
+
+  set nameDefaultPlan(String value) {
+    _nameDefaultPlan = value;
   }
 
   /// méthodes

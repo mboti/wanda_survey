@@ -16,6 +16,9 @@ class Floor{
   late Ruler ruler;
   List<Pt> _pts = <Pt>[];
 
+  late bool _isDrawRuler;
+  late bool _isDrawPt;
+
   //Pt pt = Pt.WithOffset(Offset.zero);
   Floor(String nameFloor, double altitudeFloor, double hauteurFloor){
     _idFloor = 1;
@@ -23,6 +26,8 @@ class Floor{
     _altitudeFloor = altitudeFloor;
     _hauteurFloor = hauteurFloor;
     ruler = Ruler();
+    _isDrawRuler = false;
+    _isDrawPt = true;
   }
 
 
@@ -58,13 +63,23 @@ class Floor{
     _nameFloor = value;
   }
 
+  bool get isDrawRuler => _isDrawRuler;
+
+  set isDrawRuler(bool value) {
+    _isDrawRuler = value;
+  }
+
+  bool get isDrawPt => _isDrawPt;
+
+  set isDrawPt(bool value) {
+    _isDrawPt = value;
+  }
+
   addPt (){
   }
 
   removePt(){
   }
-
-
 
 
 }//Fin

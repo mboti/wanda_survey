@@ -2,12 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/api/gest_detector.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
-import 'package:matrix_gesture_mb/ui/component/component_import_Image.dart';
 import 'package:matrix_gesture_mb/ui/painter/cust_paint.dart';
 import 'package:matrix_gesture_mb/utils/screen.dart';
 import 'package:image_picker/image_picker.dart';
-
-
 
 
 class ActivityScene extends StatefulWidget {
@@ -27,22 +24,24 @@ class ActivitySceneState extends State<ActivityScene> {
   final GlobalKey _key = GlobalKey();
   final GlobalKey globalKey = GlobalKey();
 
-  double? _x, _y;
-
   File? imageFile;
   XFile? picture;
 
-  ComponentImportImage componentImportImage = ComponentImportImage();
+
+  //PartDialogImportPlan componentImportImage = PartDialogImportPlan();
 
   /// Fermer de rafraîchir la scène lorsque l'on déplace la règle par exemple
   static final repaintNotifier = ValueNotifier<int>(0);
+
+
+
 
   //static CustPaint custPaint = CustPaint(repaint: _counter);
 
 
 
   // late double width = WidgetsBinding.instance.window.physicalSize.width;     //Largeur ecran
-  // late double height = WidgetsBinding.instance.window.physicalSize.height; //Hauteur écran
+  // late double height = WidgetsBinding.instance.window.physicalSize.height;   //Hauteur écran
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +53,6 @@ class ActivitySceneState extends State<ActivityScene> {
 
     initProject("name project test", size, isTablet);
 
-    //String pathImage = "images/plan.jpg";
-    Project().getFloor(0)!.plan.pathImg = "images/plan.jpg";
-    //String? pathImg = Project().getFloor(0)!.plan.pathImg;
 
     return Scaffold(
         backgroundColor: Colors.grey,
@@ -69,18 +65,7 @@ class ActivitySceneState extends State<ActivityScene> {
           width: size.width,
           child: Column(
 
-
               children: <Widget>[
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    padding: const EdgeInsets.all(7),
-                    textStyle: const TextStyle(fontSize: 20),
-                  ),
-                  onPressed: _getImageDimension,
-                  child: const Text('Get Image Size'),
-                ),
 
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -88,8 +73,8 @@ class ActivitySceneState extends State<ActivityScene> {
                     padding: const EdgeInsets.all(2),
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed:() => componentImportImage.createState().buildShowDialogForChoiceCamOrGal(context),
-                  //ComponentImportImageState().buildShowDialogForChoiceCamOrGal(ComponentImportImageState().context),
+                  onPressed:() => buildShowDialogForChoiceCamOrGal(),
+                  //onPressed:() => buildShowDialogForChoiceCamOrGal(context),
                   child: const Text('Get Image'),
                 ),
 
@@ -132,17 +117,14 @@ class ActivitySceneState extends State<ActivityScene> {
 
 
                                 child: Center(
-                                  child: componentImportImage.createState().buildImageDisplayWidget(),
+                                  //child: buildImageDisplayWidget(),
+                                  child: buildImageDisplayWidget(),
                                   /*
                                     child: Image.asset(
                                       pathImg!,
                                       fit: BoxFit.cover,
-                                      // height: size.height,
-                                      // width: size.width,
                                     ),
-                                  //),
                                   */
-
                                 ),
                               ),
 
@@ -172,7 +154,124 @@ class ActivitySceneState extends State<ActivityScene> {
     );
   }
 
+  void initProject(String nameProject, Size size, bool isTablet){
+    Project().initProject(nameProject, size.width, size.height, isTablet);
+  }
 
+
+
+  ///===========================================================================
+  ///              BOITE DE DIALOGUE POUR IMPORTER UN PLAN
+  ///===========================================================================
+
+  Widget buildImageDisplayWidget(){
+    //mainAxisAlignment : MainAxisAlignment.center;
+    if(imageFile != null){ // Selection de notre image
+      return  Container(
+
+          child: buildImage()
+      );
+    }else{
+      return Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Project().nameDefaultPlan),
+            ),
+            color: Colors.black12
+        ),
+      );
+    }
+  }
+
+  _openCamera() async{
+    ImagePicker imagePicker = ImagePicker();
+    var picture = await imagePicker.pickImage(source: ImageSource.camera);
+    if(picture?.path != null){
+      setState(() {
+        imageFile = File(picture!.path);
+        updateProject(picture!.path);
+      });
+    }
+    /// Ne stockez pas le contexte directement dans des classes personnalisées et
+    /// n'utilisez pas le contexte après asynchrone si vous n'êtes pas sûr que votre widget est monté.
+    ///    https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps
+    Navigator.of(context).pop();
+  }
+
+
+
+  _openGalery() async{
+    ImagePicker imagePicker = ImagePicker();
+    var picture = await imagePicker.pickImage(source: ImageSource.gallery);
+    if(picture?.path != null){
+      setState(() {
+        imageFile = File(picture!.path);
+        updateProject(picture.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+
+
+  // Boîte de dialogue destiné à importer un plan
+  Future<void> buildShowDialogForChoiceCamOrGal(){
+    return showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: Text("Ouvrir"),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              ElevatedButton(
+                child: Text("Camera"),
+                onPressed: (){
+                  //getImage(imageSource: ImageSource.gallery);
+                  _openCamera();
+                },
+              ),
+              Padding(padding: EdgeInsets.all(8.0)),
+              ElevatedButton(
+                child: const Text("Galerie"),
+                onPressed: () {
+                  //getImage(imageSource: ImageSource.gallery);
+                  _openGalery();
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+
+
+
+  Widget buildImage () {
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+            image: FileImage(imageFile!),
+          ),
+          color: Colors.black12
+      ),
+    );
+  }
+
+  updateProject(String path) {
+    // Indiquer le nouveau chemin de l'image + activer la règle
+    Project().getFloor(0)!.plan.pathImg = path;
+    Project().getFloor(0)!.isDrawRuler = true;
+  }
+
+
+
+
+  ///===========================================================================
+  ///    PARTIE DEDIEE A RECUPERER DES INFOS SUR LES DIMENSIONS DE L IMAGE
+  ///===========================================================================
+  /*
   _getImageDimension() {
     //Image image = Image.network(imageURL);
     //Image image = Image.asset(pathImg);
@@ -189,9 +288,6 @@ class ActivitySceneState extends State<ActivityScene> {
         },
       ),
     );
-
-    print("je suis bien passé par là");
-
     refresh();
 
     _getImagePosition(_key);
@@ -211,15 +307,16 @@ class ActivitySceneState extends State<ActivityScene> {
     }
   }
 
-
-  void initProject(String nameProject, Size size, bool isTablet){
-    Project().initProject(nameProject, size.width, size.height, isTablet);
-  }
-
   refresh() {
     setState(() {});
     print(Project().getFloor(0)?.plan.pathImg);
   }
+   */
+
+
+
+
+
 }
 
 
