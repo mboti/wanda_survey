@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/api/gest_detector.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/ui/component/menu_svg.dart';
 import 'package:matrix_gesture_mb/ui/painter/cust_paint.dart';
 import 'package:matrix_gesture_mb/utils/screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,6 +27,9 @@ class ActivitySceneState extends State<ActivityScene> {
 
   File? imageFile;
   XFile? picture;
+
+  // Le paramètre correspond à la largeur de l'image
+  MenuSvg menuSvg = MenuSvg(100);
 
 
   //PartDialogImportPlan componentImportImage = PartDialogImportPlan();
@@ -57,17 +61,26 @@ class ActivitySceneState extends State<ActivityScene> {
     return Scaffold(
         backgroundColor: Colors.grey,
         appBar: AppBar(
-          //title: const Text('Name project'),
           title: Text(Project().name),
+          centerTitle: true,
+          automaticallyImplyLeading: false, //supprime le bouton retour de l'apbar.
+          leading: buildBackButtonLeadingField(),
+          actions: <Widget>[menuSvg.build_ico_save2Button(), ],
         ),
+
         body:SizedBox(
           height: size.height,
           width: size.width,
           child: Column(
 
               children: <Widget>[
+                menuSvg.buildRowForButtons(),
+                //menuSvg.buildRowForLockUnluckButtons(),
 
-                ElevatedButton(
+                /*ElevatedButton(
+
+
+
                   style: ElevatedButton.styleFrom(
                     primary: Colors.green,
                     padding: const EdgeInsets.all(2),
@@ -83,6 +96,8 @@ class ActivitySceneState extends State<ActivityScene> {
                   'Image Width : ${imageSize.width.toString()} px',
                   style: const TextStyle(fontSize: 15),
                 ),
+                 */
+
                 Expanded(
                   child: GestDetector(
                     key: _key,
@@ -190,7 +205,7 @@ class ActivitySceneState extends State<ActivityScene> {
     if(picture?.path != null){
       setState(() {
         imageFile = File(picture!.path);
-        updateProject(picture!.path);
+        updateProject(picture.path);
       });
     }
     /// Ne stockez pas le contexte directement dans des classes personnalisées et
@@ -266,7 +281,33 @@ class ActivitySceneState extends State<ActivityScene> {
   }
 
 
+  ///===========================================================================
+  ///                           MANAGE MENU
+  ///===========================================================================
 
+  // Bouton pour revenir à la page d'acceuil
+  buildBackButtonLeadingField() {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: navigateToHomePage,
+    );
+  }
+  // Bouton pour Enregistrer le projet
+  buildSaveButtonField() { //TODO Koudous
+    return IconButton(
+      icon: Icon(Icons.save),
+      onPressed: (){
+        [
+
+        ];
+      },
+    );
+  }
+
+  // Methode pour revenir sur la 1ère page Home
+  void navigateToHomePage(){
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
 
   ///===========================================================================
   ///    PARTIE DEDIEE A RECUPERER DES INFOS SUR LES DIMENSIONS DE L IMAGE
@@ -312,9 +353,6 @@ class ActivitySceneState extends State<ActivityScene> {
     print(Project().getFloor(0)?.plan.pathImg);
   }
    */
-
-
-
 
 
 }

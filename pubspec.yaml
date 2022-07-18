@@ -19,6 +19,7 @@ dependencies:
 
   wifi_hunter: ^1.1.0+1        # sniffer wifi
   permission_handler: ^9.2.0   # permission pour visualiser le wifi
+  flutter_svg: ^1.1.1+1        # gestion des fichiers de type SVG
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +35,14 @@ flutter:
     - images/plan.jpg
     - images/plan2.jpg
     - images/ico_soft.png
+    - images/ico/ico_floor.svg
+    - images/ico/ico_fullplan.svg
+    - images/ico/ico_heatmap.svg
+    - images/ico/ico_importplan.svg
+    - images/ico/ico_ruler_lock.svg
+    - images/ico/ico_ruler_unlock.svg
+    - images/ico/ico_save.svg
+    - images/ico/ico_save2.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
