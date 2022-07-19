@@ -1,4 +1,4 @@
-import 'package:matrix_gesture_mb/utils/ImportPlan.dart';
+//import 'package:matrix_gesture_mb/utils/ImportPlan.dart';
 
 /**
  * Classe permettant de gerer un plan de batiment
@@ -11,7 +11,7 @@ class Plan{
   double? xMin, yMin, xMax, yMax;
   double? width;
   double? height;
-  ImportPlan importPlan = ImportPlan();
+  //ImportPlan importPlan = ImportPlan();
 
   Plan(this.idPlan, this.pathImg, this.key, this.xMin, this.yMin, this.xMax, this.yMax, this.width, this.height);
   Plan.WithScreenCoordinatesAndImageCoordinate(this.xMin, this.yMin, this.xMax, this.yMax, this.width, this.height);
