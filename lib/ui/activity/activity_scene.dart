@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -13,6 +14,10 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:ui' as ui;
 
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../model/plan.dart';
+import '../../model/project.dart';
+import '../../model/ruler.dart';
 
 
 class ActivityScene extends StatefulWidget {
@@ -39,7 +44,11 @@ class ActivitySceneState extends State<ActivityScene> {
   MenuSvg menuSvg = MenuSvg(100);
 
   DataServer dataServer = DataServer();
-  DataServerState dataServerState = DataServerState(); 
+  DataServerState dataServerState = DataServerState();
+
+
+  //Ruler ruler = Ruler();
+  //final json = Ruler().toJson();
 
 
   //PartDialogImportPlan componentImportImage = PartDialogImportPlan();
@@ -56,6 +65,14 @@ class ActivitySceneState extends State<ActivityScene> {
 
   // late double width = WidgetsBinding.instance.window.physicalSize.width;     //Largeur ecran
   // late double height = WidgetsBinding.instance.window.physicalSize.height;   //Hauteur écran
+
+/*
+  @override
+  void initState() {
+    super.initState();
+    ruler;
+    json;
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -115,13 +132,15 @@ class ActivitySceneState extends State<ActivityScene> {
                   ),
                   onPressed:() {[
                     save(),
+                    //Project().toString(),
                     // dataServerState.save(),
                     dataServerState.createDir(),
-                    dataServerState.writeData(199999999.22),
+                    dataServerState.writeData(),
                   ];
                   },
                   child: const Text('save'),
                 ),
+
 
 
                 Expanded(
@@ -319,6 +338,8 @@ class ActivitySceneState extends State<ActivityScene> {
       onPressed: navigateToHomePage,
     );
   }
+
+
   // Bouton pour Enregistrer le projet
   buildSaveButtonField() { //TODO Koudous
     return IconButton(
@@ -406,7 +427,24 @@ class ActivitySceneState extends State<ActivityScene> {
         quality: 60,
         name: "canvas_image");
     print(result);
+    displayTojson();
+    displayFromson();
   }
+
+
+  Ruler ruler = Ruler();
+   static final json = Ruler().toJson();
+  displayTojson(){
+    print('RulerJson, meth toJson: ${ruler.toJson()}');
+    print('RulerJson, meth toJson: test iter: ${ruler.toJson().values.elementAt(5)}');
+  }
+
+  final newRuler = Ruler.fromJson(json);
+  displayFromson(){
+    print('RulerJson, meth fromJson: $newRuler');
+  }
+
+
 
 
 }

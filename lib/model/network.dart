@@ -1,7 +1,12 @@
-
+import 'package:json_annotation/json_annotation.dart';
 
 ///Classe décrivant les configurations d'un network
 
+
+
+part 'network.g.dart';
+
+@JsonSerializable()
 class Network {
 
   String? _ssid;
@@ -12,7 +17,14 @@ class Network {
   int? _channelWidth;
 
 
-  Network(this._bssid, this._ssid, this._capability, this._frequency, this._level, this._channelWidth);
+  Network(String bssid, String ssid, String capability, int frequency, int level, int channelWidth) {
+    _bssid = bssid;
+    _ssid = ssid;
+    _capability = capability;
+    _frequency = frequency;
+    _level = level;
+    _channelWidth = channelWidth;
+  }
 
   String get bssid => _bssid!;
 
@@ -54,6 +66,12 @@ class Network {
   String toString() {
     return 'Network{_bssid: $_bssid, _ssid: $_ssid, _capability: $_capability, _frequency: $_frequency, _level: $_level, _channel_width: $_channelWidth}';
   }
+
+  factory Network.fromJson(Map<String, dynamic> json) => _$NetworkFromJson(json);
+
+
+  Map<String, dynamic> toJson() => _$NetworkToJson(this);
+
 
 
 }//Fin

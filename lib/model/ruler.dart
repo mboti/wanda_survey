@@ -1,5 +1,10 @@
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+
+part 'ruler.g.dart';
+
+@JsonSerializable()
 class Ruler{
 
   late double _georefX;
@@ -69,4 +74,13 @@ class Ruler{
     _txtY = (_georefY + _scaleY)/2;
   }
 
+  factory Ruler.fromJson(Map<String, dynamic> json) => _$RulerFromJson(json);
+
+
+  Map<String, dynamic> toJson() => _$RulerToJson(this);
+
+  @override
+  String toString() {
+    return 'Ruler{_georefX: $_georefX, _georefY: $_georefY, _scaleX: $_scaleX, _scaleY: $_scaleY, _txtX: $_txtX, _txtY: $_txtY, _lengthMeter: $_lengthMeter, rateRulerVsW: $rateRulerVsW, _widthMarker: $_widthMarker}';
+  }
 }

@@ -11,7 +11,7 @@ import 'ui/activity/activity_scene.dart';
 List<Demo> demos = [
   Demo(
       'Scene',
-      'Demo Koudous pour t\'expliquer comment ça marche',
+      'Demo ',
       const ActivityScene()),
   Demo(
       'DrawImage',

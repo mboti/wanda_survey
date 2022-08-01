@@ -2,9 +2,13 @@ import 'package:matrix_gesture_mb/model/plan.dart';
 import 'package:matrix_gesture_mb/model/pt.dart';
 import 'package:matrix_gesture_mb/model/ruler.dart';
 
+import 'package:json_annotation/json_annotation.dart';
+
 /// On ne s'en occupe pas pour le moment
+///
+part 'floor.g.dart';
 
-
+@JsonSerializable(explicitToJson: true)
 class Floor{
 
   int? _idFloor;
@@ -80,6 +84,12 @@ class Floor{
 
   removePt(){
   }
+
+
+  factory Floor.fromJson(Map<String, dynamic> json) => _$FloorFromJson(json);
+
+
+  Map<String, dynamic> toJson() => _$FloorToJson(this);
 
 
 }//Fin

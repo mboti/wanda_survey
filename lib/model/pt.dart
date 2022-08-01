@@ -1,10 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/model/network.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 /// Classe décrivant les points de Mesure placés sur un plan
 
+part 'pt.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Pt{
 
-  int? _id;
+  @JsonKey(name: '_id')
+  int? _id ;
+
+
+  int get id => _id!;
+
+  set id(int value) {
+    _id = value;
+  }
+
   String? _label;
   double? _posX;
   double? _posY;
@@ -13,15 +27,17 @@ class Pt{
 
   List<Network> _networks = <Network>[];
 
-  Pt(this._id, this._label, this._posX, this._posY, this._radius);
+  Pt(int id, String label, double posX, double posY, double radius) {
+    _id = id;
+    _label = label;
+    _posX = posX;
+    _posY = posY;
+    _radius = radius;
+  }
   Pt.WithPositionOnly(this._posX, this._posY);
   Pt.WithoutId(this._label, this._posX, this._posY, this._radius);
 
-  int get id => _id!;
 
-  set id(int value) {
-    _id = value;
-  }
 
   double get radius => _radius;
 
@@ -64,7 +80,7 @@ class Pt{
 
   @override
   String toString() {
-    return 'Pt{_id: $_id, _label: $_label, _posX: $_posX, _posY: $_posY, _radius: $_radius}';
+    return 'Pt{_id: $id, _label: $_label, _posX: $_posX, _posY: $_posY, _radius: $_radius}';
   }
 
   /// get la liste de network
@@ -84,5 +100,11 @@ class Pt{
   removeNetworks(){
 
   }
+
+  factory Pt.fromJson(Map<String, dynamic> json) => _$PtFromJson(json);
+
+
+  Map<String, dynamic> toJson() => _$PtToJson(this);
+
 
 }//Fin

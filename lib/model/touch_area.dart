@@ -16,12 +16,16 @@
   Ymax_touch  = yTouch + (Wa/2)
  */
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 
+part 'touch_area.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 class TouchArea {
 
   double _zoom = 1;
+  bool isTablet = true;
   final double _zoomMax = 5;
   final double _zoomMin = 0.3;
   final double rateAreaTouchVsWMobile = 0.15;  /// modifier cette valeur pour l'ajuster au mobile
@@ -83,4 +87,16 @@ class TouchArea {
     }
     return false;
   }
+
+  factory TouchArea.fromJson(Map<String, dynamic> json) => _$TouchAreaFromJson(json);
+
+
+  Map<String, dynamic> toJson() => _$TouchAreaToJson(this);
+
+/*
+  TouchArea touchArea = TouchArea(11, true);
+  final jsonTA = TouchArea(11, true).toJson();
+  print(TouchArea(11, true).toJson());*/
+
+
 }

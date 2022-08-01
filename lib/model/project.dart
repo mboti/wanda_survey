@@ -1,16 +1,15 @@
+import 'dart:convert';
+
 import 'package:matrix_gesture_mb/model/floor.dart';
+import 'package:matrix_gesture_mb/model/ruler.dart';
 import 'package:matrix_gesture_mb/model/touch_area.dart';
 
+import 'package:json_annotation/json_annotation.dart';
 
-enum ItemSelected {
-  none,
-  ptRef,
-  ptScale,
-  lengthRuler,
-  ptMeasure,
-  ap
-}
 
+part 'project.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Project {
 
   /// Création du project en variable statique,
@@ -126,43 +125,80 @@ initProject(String name,double W_screen, double H_screen, bool isTablet){
     }
     return null;
   }
-}
 
+  ///==================================================================================================
+  ///    PARTIE DEDIEE A LA SERIALISATION/DESERIALISATION JSON
+  ///==================================================================================================
 
+  //Permet de convertir notre classe projet en JSON pour pouvoir l'envoyer à notre base de donnée
 /*
-  int? id;
-  String? name;
-  String? description;
-  String? image;
-
-  Project({this.name, this.description, this.image});
-  Project.withId({this.id, this.name, this.description, this.image});
-  Project.withNameAndDescription({this.name, this.description});
-
-  /**
-   * Permet de convertir notre classe projet en Map pour
-   * pouvoir l'envoyer à notre base de donnée
-   */
-  Map<String,dynamic> toMap(){
+  Map<String,dynamic> toJson(){
     var map = Map<String,dynamic>();
-    map["name"]=name;
-    map["description"]=description;
-    map["image"]=image;
-    if(id!=null){
-      map["id"]=id;
+    map["name"] = _name;
+    map["heightFloor"]= _heightFloor;
+    map["nameDefaultPlan"]= _nameDefaultPlan;
+    map["floors"]= _floors;
+    map["idFloor"]= _floors.iterator.current.idFloor;
+    map["nameFloor"]= _floors.iterator.current.nameFloor;
+    map["altitudeFloor"]= _floors.iterator.current.altitudeFloor;
+    map["hauteurFloor"]= _floors.iterator.current.hauteurFloor;
+    if(_idProject! == null){
+      map["id"]=_idProject;
     }
     return map;
   }
 
-  /**
-   * Converti notre map en la classe Project pour poivoir
-   * recuperer les elm depuis notre map
-   */
-  Project.fromObject(dynamic o){
+  //Converti notre map en la classe Project pour poivoir recuperer les elm depuis notre map
+  Project.fromJson(Map<String, dynamic> json){
     //this.id = int.tryParse(o["id"]);
-    this.id = o["id"];
-    this.name=o["name"];
-    this.description=o["description"];
-    this.image = o["image"];
+    this._idProject = json["id"];
+    this.name= json["name"];
+    this._heightFloor= json["heightFloor"];
+    this._nameDefaultPlan =  json["nameDefaultPlan"];
+    this._floors =  json["floors"];
+    this._floors.iterator.current.idFloor =  json["idFloor"];
+    this._floors.iterator.current.nameFloor =  json["nameFloor"];
+    this._floors.iterator.current.altitudeFloor =  json["altitudeFloor"];
+    this._floors.iterator.current.hauteurFloor =  json["hauteurFloor"];
   }
 */
+
+  factory Project.fromJson(Map<String, dynamic> json) {
+    return _$ProjectFromJson(json);
+  }
+
+
+  Map<String, dynamic> toJson() {
+    return _$ProjectToJson(this);
+  }
+
+  @override
+  String toString() {
+    return 'Project{_idProject: $_idProject, _name: $_name, _heightFloor: $_heightFloor, _isTablet: $_isTablet, _nameDefaultPlan: $_nameDefaultPlan, _floors: $_floors, touchArea: $touchArea}';
+  }
+
+
+
+
+  //final json = Project().toJson();
+  //print(Project().)
+
+
+
+
+//Map projetMap = jsonDecode(jsonString);
+  //var event = Project().fromJson(projetMap);
+  //String json = jsonEncode(event);
+
+
+
+}
+
+enum ItemSelected {
+  none,
+  ptRef,
+  ptScale,
+  lengthRuler,
+  ptMeasure,
+  ap
+}
