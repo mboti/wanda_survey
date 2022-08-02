@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:matrix_gesture_mb/api/gest_detector.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/ui/activity/activity_add_new_project.dart';
 import 'package:matrix_gesture_mb/ui/component/data_sever.dart';
 import 'package:matrix_gesture_mb/ui/component/menu_svg.dart';
 import 'package:matrix_gesture_mb/ui/painter/cust_paint.dart';
@@ -121,12 +122,13 @@ class ActivitySceneState extends State<ActivityScene> {
                   style: const TextStyle(fontSize: 15),
                 ),
 
-               /* ElevatedButton(
+              /*  ElevatedButton(
                   style: ElevatedButton.styleFrom(
                   ),
-                  onPressed:() => dataServerState.writeData(199999999),
+                  onPressed:() => navigateToCreateProjet(),
                   child: const Text('import'),
                 ),*/
+
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                   ),
@@ -216,6 +218,13 @@ class ActivitySceneState extends State<ActivityScene> {
 
   void initProject(String nameProject, Size size, bool isTablet){
     Project().initProject(nameProject, size.width, size.height, isTablet);
+  }
+
+
+  navigateToCreateProjet(){
+    Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context){
+      return new CreateProjet();
+    }));
   }
 
 

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/ui/activity/activity_add_new_project.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_paint_image.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_wifi.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,22 +33,42 @@ void main() => runApp(MaterialApp(
     body: Builder(
       builder: (BuildContext ctx) {
         return Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: demos.map((demo) => ListTile(
-                onTap: () => showDemo(ctx, demo),
-                leading: const Icon(Icons.image),
-                title: Text(demo.title),
-                subtitle: Text(demo.subtitle),
-              ))
-                  .toList(),
-            ),
-          ),
+            child: SingleChildScrollView(
+          child: Column(
+            children: [
+
+               Column(
+                  children:  demos.map((demo) => ListTile(
+                    onTap: () => showDemo(ctx, demo),
+                    leading: const Icon(Icons.image),
+                    title: Text(demo.title),
+                    subtitle: Text(demo.subtitle),
+                  ),)   .toList(),
+                ),
+
+              ElevatedButton(
+              style: ElevatedButton.styleFrom(
+              ),
+              onPressed:() => {
+              Navigator.push(ctx, new MaterialPageRoute(builder: (BuildContext context){
+              return new CreateProjet();
+              })),
+              },
+              child: const Text('Nouveau Projet'),
+              ),
+            ],
+              ),
+          )
+
         );
       },
     ),
   ),
 ));
+
+
+
+
 
 
 showDemo(BuildContext ctx, Demo demo) {
