@@ -23,8 +23,11 @@ class Floor{
   late bool _isDrawRuler;
   late bool _isDrawPt;
 
+
+  Floor(){ }
+
   //Pt pt = Pt.WithOffset(Offset.zero);
-  Floor(String nameFloor, double altitudeFloor, double hauteurFloor){
+  Floor.WithParam(String nameFloor, double altitudeFloor, double hauteurFloor){
     _idFloor = 1;
     _nameFloor = nameFloor;
     _altitudeFloor = altitudeFloor;

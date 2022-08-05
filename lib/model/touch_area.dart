@@ -36,7 +36,8 @@ class TouchArea {
   double _xMaxTouch = 0;
   double _yMaxTouch = 0;
 
-  TouchArea(double zoom, bool isTablet){
+    TouchArea();
+    TouchArea.WithParam(double zoom, bool isTablet){
     _zoom = zoom;
 
     // Mobile -> rateAreaTouchVsW = 0.2

@@ -35,8 +35,6 @@ class Ruler{
     _lengthMeter = 5.0;
   }
 
-
-
   double get georefX => _georefX;
   set georefX(double value) {
     _georefX = value;

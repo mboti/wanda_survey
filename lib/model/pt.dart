@@ -27,7 +27,8 @@ class Pt{
 
   List<Network> _networks = <Network>[];
 
-  Pt(int id, String label, double posX, double posY, double radius) {
+  Pt();
+  Pt.WithParam(int id, String label, double posX, double posY, double radius) {
     _id = id;
     _label = label;
     _posX = posX;

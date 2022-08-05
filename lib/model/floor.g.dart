@@ -7,7 +7,7 @@ part of 'floor.dart';
 // **************************************************************************
 
 Floor _$FloorFromJson(Map<String, dynamic> json) {
-  return Floor(
+  return Floor.WithParam(
       json['nameFloor'] as String,
       (json['altitudeFloor'] as num).toDouble(),
       (json['hauteurFloor'] as num).toDouble(),

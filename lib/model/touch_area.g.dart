@@ -6,7 +6,7 @@ part of 'touch_area.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TouchArea _$TouchAreaFromJson(Map<String, dynamic> json) => TouchArea(
+TouchArea _$TouchAreaFromJson(Map<String, dynamic> json) => TouchArea.WithParam(
       (json['zoom'] as num).toDouble(),
       json['isTablet'] as bool,
     );

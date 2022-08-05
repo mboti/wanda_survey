@@ -6,7 +6,7 @@ part of 'pt.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Pt _$PtFromJson(Map<String, dynamic> json) => Pt(
+Pt _$PtFromJson(Map<String, dynamic> json) => Pt.WithParam(
       json['id'] as int,
       json['label'] as String,
       (json['posX'] as num).toDouble(),

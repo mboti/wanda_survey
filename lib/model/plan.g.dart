@@ -6,7 +6,7 @@ part of 'plan.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Plan _$PlanFromJson(Map<String, dynamic> json) => Plan(
+Plan _$PlanFromJson(Map<String, dynamic> json) => Plan.WithParam(
       json['idPlan'] as int?,
       json['pathImg'] as String?,
       json['key'] as String?,

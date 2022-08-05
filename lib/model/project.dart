@@ -42,7 +42,7 @@ initProject(String name,double W_screen, double H_screen, bool isTablet){
     _isTablet = isTablet;
     addFloor();
     getFloor(0)!.plan.pathImg = _nameDefaultPlan;
-    touchArea = TouchArea(1, _isTablet);
+    touchArea = TouchArea.WithParam(1, _isTablet);
   }
 
 
@@ -107,7 +107,7 @@ initProject(String name,double W_screen, double H_screen, bool isTablet){
   addFloor(){
     int nbFloors = _floors.length;  // on récupère le nombre d'étage existant
     double altitude = nbFloors * _heightFloor;
-    Floor floor = Floor(
+    Floor floor = Floor.WithParam(
                           (nbFloors+1).toString(),
                           altitude,
                           _heightFloor

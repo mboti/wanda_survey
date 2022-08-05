@@ -3,7 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:matrix_gesture_mb/model/floor.dart';
+import 'package:matrix_gesture_mb/model/plan.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
+import 'package:matrix_gesture_mb/model/pt.dart';
+import 'package:matrix_gesture_mb/model/ruler.dart';
+import 'package:matrix_gesture_mb/model/touch_area.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'dart:ui' as ui;
@@ -24,14 +29,12 @@ class DataServerState extends State<DataServer>{
   GlobalKey globalKey = GlobalKey();
 
 
-
   Project project = Project();
   //final json = Project().toJson();
   static final json = Project().toJson();
   //File jsonFile;
   //Directory dir;
   //String json = "myFile.json";
-
 
 
 
@@ -57,12 +60,6 @@ class DataServerState extends State<DataServer>{
   ///==================================================================================================
 
 
-
-   //1- Find the corect local path
-   //2- Create a refernce to the file location
-   //3- Write data to the file
-   //4- Read data from the file
-
   //1- Find the corect local path
   Future<String> get localPath async{
     final directory = await getApplicationDocumentsDirectory();
@@ -83,8 +80,8 @@ class DataServerState extends State<DataServer>{
     final file = await localFile;
     print('----------etage_______');
 
-   //return file.writeAsString(displayTojson());
-    return file.writeAsString('$json2.');
+   return file.writeAsString(displayTojson());
+    //return file.writeAsString('$json2.');
   }
 
   // 4- Read data from the file
@@ -92,6 +89,8 @@ class DataServerState extends State<DataServer>{
     try{
       final file = await localFile;
       String data = await file.readAsString();
+      print("Affichage du date (read)");
+      print(data);
       return double.parse(data);
     } catch(e){
       return 0;
@@ -128,41 +127,159 @@ class DataServerState extends State<DataServer>{
   ///static final json = Project().toJson();
   displayTojson(){
     final json2 = json;
-  /*  String v1 = json2.values.first;
-    String v1prime = json2.values.elementAt(0);
-    String v2 = json2.values.elementAt(1);
-    String v3 = json2.values.elementAt(2);
-    String v4 = json2.values.elementAt(3);
-    String v5 = json2.values.elementAt(4);
-    String v6 = json2.values.elementAt(5);
-    String v7 = json2.values.elementAt(6);
-    String v8 = json2.values.elementAt(7);
-    String v9 = json2.values.elementAt(8);*/
-    //Map <String, dynamic> p;
 
     Map <String, dynamic> p = json2;
-    var list = [];
-    //var newObj = p.forEach((key, value) {print(key); print(value);});
-    //var newObj = p.entries.forEach((element) { print(element); });
-    //var newObj = p.entries.forEach((element) { print(element.key); });
-    //var newObj = p.entries.forEach((element) { print(element.value); });
-    var newObj = p.entries.map((elm) { return elm.key ; }).toList();
-    //var newObj = p.entries.map((elm) { return   ;}).toList();
 
-    //list.add(newObj);
-    //return newObj;
-    return newObj.toString();
+    var kProjectName;
+    var valProjectName;
 
-    //print('ProjectJson, meth toJson: $p');
-    //print('ProjectJson, meth toJson: ${Project().toJson()}');
-    //return json2.forEach((key, value) {project.floors.first.ruler.rateRulerVsW});
-    //return json2.forEach((key, value) {print(json.entries.toString());});
+    var valHeightFloor ;
+
+    var valNameDefaultPlan ;
+
+    MapEntry <String, dynamic> kFloorGrowableList ;
+
+    var valFloorGrowableList = [];
+    var valFloorid, valFloorName, valFloorAltitude, valFloorHauteur ;
+    Floor floor = Floor();
+
+    Plan plan = Plan();
+    var valPlanId, valPlanPathImg, valPlanXMin, valPlanYMin, valPlanXMax,
+        valPlanYMax, valPlanWidth, valPlanHeigth;
+
+    Ruler ruler = Ruler();
+    var valRulerTX, valRulerTY;
+
+    var pts = [];
+
+    var valIsDrawRuler, valIsDrawPt;
+
+    TouchArea touchArea = TouchArea();
+    var  valTouchAreaZoom, valTouchAreaZoomMax, valTouchAreaZoomMin,
+         valTouchAreaRateAreaTouchVsWMobile, valTouchAreaRateAreaTouchVsWTablet,
+         valTouchAreaRateAreaTouchVsW, valTouchAreaXMinTouch, valTouchAreaYMinTouch,
+         valTouchAreaXMaxTouch, valTouchAreaYMaxTouch;
+
+
+    newObj() => p.entries.map((elm) { return elm ; }).toList();
+
+
+
+        //print("in displayFromJson");
+        //displayFromJson();
+
+        print("in diplayToJson");
+
+
+
+        kProjectName = newObj()[2].key;
+        valProjectName = newObj()[2].value;
+
+        valHeightFloor = newObj()[4].value;
+
+        valNameDefaultPlan = newObj()[8].value;
+
+        if(kProjectName != null){
+          //Floor
+          valFloorGrowableList = newObj()[5].value;
+          for(int i = 0; i<valFloorGrowableList.length; i++){
+            if(valFloorGrowableList.isNotEmpty){
+              floor = valFloorGrowableList.elementAt(i);
+              valFloorid = floor.idFloor;
+              valFloorName = floor.nameFloor;
+              valFloorAltitude = floor.altitudeFloor;
+              valFloorHauteur = floor.hauteurFloor;
+
+              valIsDrawRuler = floor.isDrawRuler;
+              valIsDrawPt = floor.isDrawPt;
+
+              if(valFloorid != null){
+                //Paln
+                plan = floor.plan;
+                plan.runtimeType.toString();
+                valPlanId = plan.idPlan;
+                valPlanPathImg = plan.pathImg;
+                valPlanXMin = plan.xMin;
+                valPlanYMin = plan.yMin;
+                valPlanXMax = plan.xMax;
+                valPlanYMax = plan.yMax;
+                valPlanWidth = plan.width;
+                valPlanHeigth = plan.height;
+
+                // Ruler
+                ruler = floor.ruler;
+                valRulerTX = ruler.txtX;
+                valRulerTY = ruler.txtY;
+
+                //Pt
+                pts = floor.pts;
+
+
+              }
+            }
+          }
+
+          //touchArea = newObj()[0].value;
+          touchArea =  project.touchArea!; // Make Sure, it is a project same Object  !!!
+
+          valTouchAreaZoom = touchArea.zoom;
+          valTouchAreaZoomMin = touchArea.zoomMin;
+          valTouchAreaZoomMax = touchArea.zoomMax;
+          valTouchAreaRateAreaTouchVsWMobile = touchArea.rateAreaTouchVsWMobile;
+          valTouchAreaRateAreaTouchVsWTablet = touchArea.rateAreaTouchVsWTablet;
+          //valTouchAreaRateAreaTouchVsW
+          valTouchAreaXMinTouch = touchArea.xMinTouch;
+          valTouchAreaYMinTouch = touchArea.yMinTouch;
+          valTouchAreaXMaxTouch = touchArea.xMaxTouch;
+          valTouchAreaYMaxTouch = touchArea.yMaxTouch;
+
+
+        }
+
+
+    return [
+      ('valProjectKey: $kProjectName, valProjectName: $valProjectName'),
+      ('ValvalHeightFloor: $valHeightFloor'),
+      ('ValNameDefaultPlan: $valNameDefaultPlan'),
+      ('FloorGrowableList: $valFloorGrowableList'),
+      ('ValueIdF: $valFloorid, ValueName: $valFloorName, ValueAltitude: $valFloorAltitude, Valuehauteur: $valFloorHauteur '),
+      ('ValueIdP: $valPlanId, ValuePathImg: $valPlanPathImg, ValuePlanXMin: $valPlanXMin, ValuePlanYMin: $valPlanYMin, ValuePlanXMax: $valPlanXMax, ValuePlanYMax: $valPlanYMax, ValuePlanWidth: $valPlanWidth, ValuePlanHeigth: $valPlanHeigth '),
+      ('valRulerTxtX: $valRulerTX,  valRulerTxtY: $valRulerTY'),
+      ('valPts: $pts'),
+      ('valIsDrawRuler: $valIsDrawRuler,  valIsDrawPt: $valIsDrawPt'),
+      ('zoom: $valTouchAreaZoom, zoomMin: $valTouchAreaZoomMin, zoomMax: $valTouchAreaZoomMax,  '
+          'RateAreaTouchVsWMobile: $valTouchAreaRateAreaTouchVsWMobile, RateAreaTouchVsWTablet: $valTouchAreaRateAreaTouchVsWTablet,'
+          'xMinTouch: $valTouchAreaXMinTouch, yMinTouch: $valTouchAreaYMinTouch, '
+          'xMaxTouch: $valTouchAreaXMaxTouch, yMaxTouch: $valTouchAreaYMaxTouch'),
+
+    ].toString();
+
   }
 
-  final newProject = Project.fromJson(json);
+  /*final newProject = Project.fromJson(json);
   displayFromJson(){
     print('ProjectJson, meth fromJson: $newProject');
-  }
+    print("in readData");
+    var file = new File('doc/datadata.json') ;
+    readData().then((value) {
+      setState(() {
+        fileContent = value;
+      });
+    });
+  }*/
+
+  //final jsonResult = jsonDecode("assets/data.json");
+ /* final file = new File('data/data.json');
+  String fileContent = "No Data";
+  final myController = TextEditingController();
+  loadAppUsingJsonOfWriteData(jsonResult){
+    //var jsonFile =  localFile;
+    var id = jsonResult["valProjectKey "];
+    var valProjectName = utf8.decode(jsonResult["valProjectName"]);
+    var ValvalHeightFloor  = utf8.decode(jsonResult["ValvalHeightFloor"]);
+    //jsonFile = writeData();
+    print('Affichage du jsonFile à loader: $id');
+  }*/
 
 
 
@@ -170,27 +287,8 @@ class DataServerState extends State<DataServer>{
   /// Enregistrer suivant les contraintes du projet
   ///===================================================
 
-  //1- how can save some field of my class to json file using json_serialisable
-  //2-flutter: How to select a single field from json serialization with json_serializable?
-  //3- https://github.com/bramvbilsen/Flutter-JSON-Storage-Tutorial/blob/master/lib/main.dart
-
-
 
 ////////////////////////////////////// TESST  1  1 2 1 2 1 2 1 2 1 2//////////////////////
-  /*Future<String>  createFolderInAppDocDir (String nom_dossier) async {
-
-      //Obtenir ce répertoire de documents d'application
-      répertoire final _appDocDir =  attendre  getApplicationDocumentsDirectory ();
-      // Répertoire de documents d'application + nom de dossier
-      Répertoire final _appDocDirFolder =   Répertoire ( ' ${ _appDocDir . path } /$ nom_dossier /' );
-
-      if ( await _appDocDirFolder. exists ()){ //si le dossier existe déjà, retourner le chemin
-        renvoie _appDocDirFolder.path ;
-      } else { //si le dossier n'existe pas créer le dossier puis retourner son chemin
-        Répertoire final _appDocDirNewFolder = attendre _appDocDirFolder. créer (récursif :  true );
-        return _appDocDirNewFolder.path ;
-      }
-    }*/
 
 // Methode permettant de sauver le custum painter (la scène) dans la galerie
    Future<void> save() async {
