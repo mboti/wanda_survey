@@ -22,9 +22,7 @@ class Plan{
   Plan.WithScreenCoordinates(this.xMin, this.yMin, this.xMax, this.yMax);
   Plan.WithImageCoordinate(this.width, this.height);
 
-
   factory Plan.fromJson(Map<String, dynamic> json) => _$PlanFromJson(json);
-
 
   Map<String, dynamic> toJson() => _$PlanToJson(this);
 

@@ -221,12 +221,12 @@ class ActivitySceneState extends State<ActivityScene> {
   }
 
 
+
   navigateToCreateProjet(){
     Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context){
       return new CreateProjet();
     }));
   }
-
 
 
   ///===========================================================================
@@ -267,8 +267,6 @@ class ActivitySceneState extends State<ActivityScene> {
     ///    https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps
     Navigator.of(context).pop();
   }
-
-
 
   _openGalery() async{
     ImagePicker imagePicker = ImagePicker();
@@ -426,7 +424,6 @@ class ActivitySceneState extends State<ActivityScene> {
       pngBytes;
     }
 
-
     //Request permissions if not already granted
     //if (!(await Permission.storage.status.isGranted))
     //await Permission.storage.request();
@@ -440,7 +437,6 @@ class ActivitySceneState extends State<ActivityScene> {
     displayFromJson();
   }
 
-
   Ruler ruler = Ruler();
    static final json = Ruler().toJson();
   displayTojson(){
@@ -452,8 +448,6 @@ class ActivitySceneState extends State<ActivityScene> {
   displayFromJson(){
     print('RulerJson, meth fromJson: $newRuler');
   }
-
-
 
 }
 

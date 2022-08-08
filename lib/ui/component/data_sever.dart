@@ -164,10 +164,6 @@ class DataServerState extends State<DataServer>{
     newObj() => p.entries.map((elm) { return elm ; }).toList();
 
 
-
-        //print("in displayFromJson");
-        //displayFromJson();
-
         print("in diplayToJson");
 
 
@@ -182,6 +178,7 @@ class DataServerState extends State<DataServer>{
         if(kProjectName != null){
           //Floor
           valFloorGrowableList = newObj()[5].value;
+          // TODO MBO
           for(int i = 0; i<valFloorGrowableList.length; i++){
             if(valFloorGrowableList.isNotEmpty){
               floor = valFloorGrowableList.elementAt(i);
@@ -256,20 +253,20 @@ class DataServerState extends State<DataServer>{
 
   }
 
-  /*final newProject = Project.fromJson(json);
+  final newProject = Project.fromJson(json);
   displayFromJson(){
     print('ProjectJson, meth fromJson: $newProject');
     print("in readData");
     var file = new File('doc/datadata.json') ;
     readData().then((value) {
       setState(() {
-        fileContent = value;
+       // fileContent = value;
       });
     });
-  }*/
+  }
 
-  //final jsonResult = jsonDecode("assets/data.json");
- /* final file = new File('data/data.json');
+  //final jsonResult = jsonDecode("data.json");
+  final file = new File('data/data.json');
   String fileContent = "No Data";
   final myController = TextEditingController();
   loadAppUsingJsonOfWriteData(jsonResult){
@@ -279,7 +276,7 @@ class DataServerState extends State<DataServer>{
     var ValvalHeightFloor  = utf8.decode(jsonResult["ValvalHeightFloor"]);
     //jsonFile = writeData();
     print('Affichage du jsonFile à loader: $id');
-  }*/
+  }
 
 
 
