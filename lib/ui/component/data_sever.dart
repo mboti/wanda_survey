@@ -258,20 +258,18 @@ class DataServerState extends State<DataServer>{
     print("//////---- display of d2---///////");
     readJsonData();
   }
-
-
-  Future<String> readJsonData() async{
+  
+  Future<Map<String, dynamic> > readJsonData() async{
+    Map<String, dynamic>? myJson;
     final jsonData = await rootBundle.loadString('doc/d2.json');
     try{
-      Map<String, dynamic> myJson = jsonDecode(jsonData.toString());
+      myJson = jsonDecode(jsonData.toString());
       print(myJson.toString());
     }catch(e){
       print(e);
     }
-    return " ";
+    return myJson!;
   }
-
-
 
 
 
