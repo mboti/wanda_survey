@@ -5,6 +5,7 @@ import 'package:matrix_gesture_mb/model/project.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_add_new_project.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_paint_image.dart';
 import 'package:matrix_gesture_mb/ui/activity/activity_wifi.dart';
+import 'package:matrix_gesture_mb/ui/component/data_sever.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'ui/activity/activity_scene.dart';
@@ -55,6 +56,12 @@ void main() => runApp(MaterialApp(
               })),
               },
               child: const Text('Nouveau Projet'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                ),
+                onPressed:() => DataServerState().displayFromJson(),
+                child: const Text('importer Projet'),
               ),
             ],
               ),

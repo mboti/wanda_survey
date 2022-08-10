@@ -122,12 +122,12 @@ class ActivitySceneState extends State<ActivityScene> {
                   style: const TextStyle(fontSize: 15),
                 ),
 
-                ElevatedButton(
+                /*ElevatedButton(
                   style: ElevatedButton.styleFrom(
                   ),
                   onPressed:() => DataServerState().displayFromJson(),
                   child: const Text('import Json'),
-                ),
+                ),*/
 
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -433,10 +433,10 @@ class ActivitySceneState extends State<ActivityScene> {
         quality: 60,
         name: "canvas_image");
     print(result);
-    displayTojson();
-    displayFromJson();
+    //displayTojson();
+    //displayFromJson();
   }
-
+/*
   Ruler ruler = Ruler();
    static final json = Ruler().toJson();
   displayTojson(){
@@ -447,7 +447,7 @@ class ActivitySceneState extends State<ActivityScene> {
   final newRuler = Ruler.fromJson(json);
   displayFromJson(){
     print('RulerJson, meth fromJson: $newRuler');
-  }
+  }*/
 
 }
 

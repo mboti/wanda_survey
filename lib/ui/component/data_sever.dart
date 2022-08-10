@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:matrix_gesture_mb/model/floor.dart';
 import 'package:matrix_gesture_mb/model/plan.dart';
 import 'package:matrix_gesture_mb/model/project.dart';
@@ -37,7 +38,6 @@ class DataServerState extends State<DataServer>{
   //String json = "myFile.json";
 
 
-
   @override
   initState(){
     createDir();
@@ -52,7 +52,6 @@ class DataServerState extends State<DataServer>{
 
     );
   }
-
 
 
   ///==================================================================================================
@@ -167,7 +166,6 @@ class DataServerState extends State<DataServer>{
         print("in diplayToJson");
 
 
-
         kProjectName = newObj()[2].key;
         valProjectName = newObj()[2].value;
 
@@ -256,27 +254,23 @@ class DataServerState extends State<DataServer>{
   final newProject = Project.fromJson(json);
   displayFromJson(){
     print('ProjectJson, meth fromJson: $newProject');
-    print("in readData");
-    var file = new File('doc/datadata.json') ;
-    readData().then((value) {
-      setState(() {
-       // fileContent = value;
-      });
-    });
+    print("//////---- display of d2---///////");
+    readJsonData();
   }
 
-  //final jsonResult = jsonDecode("data.json");
-  final file = new File('data/data.json');
-  String fileContent = "No Data";
-  final myController = TextEditingController();
-  loadAppUsingJsonOfWriteData(jsonResult){
-    //var jsonFile =  localFile;
-    var id = jsonResult["valProjectKey "];
-    var valProjectName = utf8.decode(jsonResult["valProjectName"]);
-    var ValvalHeightFloor  = utf8.decode(jsonResult["ValvalHeightFloor"]);
-    //jsonFile = writeData();
-    print('Affichage du jsonFile à loader: $id');
+
+  Future<String> readJsonData() async{
+    final jsonData = await rootBundle.loadString('doc/d2.json');
+    try{
+      Map<String, dynamic> myJson = jsonDecode(jsonData.toString());
+      print(myJson.toString());
+    }catch(e){
+      print(e);
+    }
+    return " ";
   }
+
+ 
 
 
 
@@ -306,6 +300,8 @@ class DataServerState extends State<DataServer>{
     print(result);
   }
 
-
+  displayFromJsonFile(){
+    readData().runtimeType;
+  }
 
 }//Fin

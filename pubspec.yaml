@@ -48,6 +48,7 @@ flutter:
     - images/ico/ico_ruler_unlock.svg
     - images/ico/ico_save.svg
     - images/ico/ico_save2.svg
+    - doc/d2.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
