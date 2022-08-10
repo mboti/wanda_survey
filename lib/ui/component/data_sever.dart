@@ -253,6 +253,7 @@ class DataServerState extends State<DataServer>{
 
   final newProject = Project.fromJson(json);
   displayFromJson(){
+    print("//////---- display of Project Object--///////");
     print('ProjectJson, meth fromJson: $newProject');
     print("//////---- display of d2---///////");
     readJsonData();
@@ -270,7 +271,7 @@ class DataServerState extends State<DataServer>{
     return " ";
   }
 
- 
+
 
 
 
